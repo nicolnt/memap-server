@@ -6,6 +6,10 @@ In `$NEO4J_HOME/config/neo4j.conf` append the following
 dbms.security.procedures.unrestricted=apoc.*
 
 apoc.uuid.enabled=true
+
+# Database init scripts
+apoc.initializer.cypher.1=CALL apoc.uuid.install('Neuron', {addToExistingNodes: false, uuidProperty: 'uuid'})
+apoc.initializer.cypher.2=CALL apoc.uuid.install('Document', {addToExistingNodes: false, uuidProperty: 'uuid'})
 ```
 
 ## Usage
@@ -16,9 +20,13 @@ CREATE CONSTRAINT ON (mynode:MyNodeLabel) ASSERT mynode.myUUIDField IS UNIQUE
 CALL apoc.uuid.install('MyNodeLabel', {addToExistingNodes: true, uuidProperty: 'myUUIDField'}) yield label, installed, properties
 ```
 
-## Help
+## Help & sources
 
-https://github.com/neo4j-contrib/neo4j-apoc-procedures#manual-installation-download-latest-release
+https://github.com/neo4j-contrib/neo4j-apoc-procedures
+
+Init with `apoc.initializer.cypher.{num}`: https://neo4j.com/docs/labs/apoc/current/operational/init-script/
+
+Installing: https://github.com/neo4j-contrib/neo4j-apoc-procedures#manual-installation-download-latest-release
 https://neo4j.com/docs/labs/apoc/current/graph-updates/uuid/
 
 ### My stackoverflow question with answer
