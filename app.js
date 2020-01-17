@@ -1,6 +1,13 @@
 const express = require('express');
 const app = express();
 
+app.use(function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, append,delete,entries,foreach,get,has,keys,set,values,Authorization");
+	res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
+	next();
+});
+
 // NOTE: middleware function that gets executed first
 app.use((req, res, next) => {
 	// NOTE: Body of the request (post and put request for instance)
