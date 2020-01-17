@@ -1,0 +1,25 @@
+name: A uuid: 01d44259-67a2-47cc-bbd3-c904ffc2fa59
+name: D uuid: f667c8bc-370c-4cc2-8b2e-5910df49a89f
+name: B uuid: 03e9ca0c-0569-4023-8ff8-488c8e7429eb
+name: C uuid: fb759973-2a7d-472b-ba94-23872f766692
+
+:params { rels: [ { type:"parent", uuidFrom: "f667c8bc-370c-4cc2-8b2e-5910df49a89f", uuidTo: "fb759973-2a7d-472b-ba94-23872f766692" }, { type:"friend", uuidFrom: "01d44259-67a2-47cc-bbd3-c904ffc2fa59", uuidTo: "fb759973-2a7d-472b-ba94-23872f766692" }, { type:"parent", uuidFrom: "03e9ca0c-0569-4023-8ff8-488c8e7429eb", uuidTo: "fb759973-2a7d-472b-ba94-23872f766692" }, { type:"parent", uuidFrom: "fb759973-2a7d-472b-ba94-23872f766692", uuidTo: "b826b0e8-66e9-4eed-857f-e0020cad3f65" } ] }
+
+D is parent of C
+B is parent of C
+
+C is friend with A
+
+// The query
+UNWIND $rels AS rel
+MATCH (from:Neuron)
+	WHERE from.uuid = rel.uuidFrom
+MATCH (to:Neuron)
+	WHERE to.uuid = rel.uuidTo
+WITH from, to, rel
+FOREACH( t IN CASE WHEN rel.type = "parent" THEN [1] ELSE [] END | 
+		CREATE (from)-[r:IS_PARENT]->(to) )
+WITH from, to, rel
+FOREACH( t IN CASE WHEN rel.type = "friend" THEN [1] ELSE [] END | 
+		CREATE (from)-[r:IS_FRIEND]->(to) )
+
