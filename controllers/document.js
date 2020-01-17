@@ -2,14 +2,12 @@ const document_model = require('../models/document');
 
 module.exports = {
 	read: {
-		entireDocument: {
-			byIdDocument(req, res) {
-
-				document_model.getDocumentById(req.params.id)
+		listDocument(req, res) {
+			document_model.getDocumentsList()
 					.then(data => {
 
 						const json = {
-								neuron: data
+								documents: data
 						}
 
 						if (data) res.status(200);
@@ -18,7 +16,28 @@ module.exports = {
 						res.send(json);
 					})
 					.catch(err => {
-						if (err) res.status(500);
+						if (err) res.status(500).send(err);
+						res.end();
+					});
+		},
+
+		entireDocument: {
+			byIdDocument(req, res) {
+
+				document_model.getDocumentById(req.params.id)
+					.then(data => {
+
+						const json = {
+								document: data
+						}
+
+						if (data) res.status(200);
+ 						else res.send(404);
+
+						res.send(json);
+					})
+					.catch(err => {
+						if (err) res.status(500).send(err);
 						res.end();
 					});
 
@@ -34,14 +53,26 @@ module.exports = {
 				
 				// NOTE: Passing the request body, it has to match with the db properties !!
 				document_model.createDocument(req.body)
-					.then(() => {
-						
+					.then(() => {	
 						res.status(200).send({});
 					})
 					.catch(err => {
-						if (err) res.status(500).end(err);
+						if (err) res.status(500).send(err);
+						res.end();
 					});
 
+			},
+
+			edit(req, res) {
+				// NOTE: Passing the request body, it has to match with the db properties !!
+				document_model.editDocument(req.body)
+					.then(() => {	
+						res.status(200).send({});
+					})
+					.catch(err => {
+						if (err) res.status(500).send(err);
+						res.end();
+					});
 			}
 		}
 
