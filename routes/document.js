@@ -8,4 +8,5 @@ module.exports = function(app) {
 	app.use('/document', router);
 
 	router.get('/:id', document_controller.read.entireDocument.byIdDocument);
+	router.post('/', express.json(), document_controller.write.document.entire);
 };

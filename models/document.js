@@ -32,5 +32,34 @@ module.exports = {
 				});
 
 		});
+	},
+
+	createDocument(document) {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
+			session.run(`
+			CREATE (document:Document)
+			SET document = $props,
+			document.dateCreated = TIMESTAMP(),
+			document.dateEdited = TIMESTAMP(),
+			document.dateConsulted = TIMESTAMP()
+			RETURN document
+			`,
+				{
+					"document": document 
+				})
+				.then(result => {
+					if (result.records.length >= 1 ) resolve();
+					else reject();
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
 	}
 }
+

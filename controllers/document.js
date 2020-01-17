@@ -28,20 +28,22 @@ module.exports = {
 
 	write: {
 
-		neuron: {
+		document: {
 
 			entire(req, res) {
-
+				
 				// NOTE: Passing the request body, it has to match with the db properties !!
-				neuron_model.createNeuron(req.body)
+				document_model.createDocument(req.body)
 					.then(() => {
+						
 						res.status(200).send({});
 					})
 					.catch(err => {
-						if (err) res.status(500).end();
+						if (err) res.status(500).end(err);
 					});
 
 			}
 		}
+
 	}
 };
