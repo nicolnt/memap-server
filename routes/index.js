@@ -13,6 +13,7 @@ module.exports = function(app) {
 
 	require('./neuron')(app);
 	require('./document')(app); 
+	require('./file')(app);
 
 	// TODO:
 	//require('./files')(app);
