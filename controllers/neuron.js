@@ -41,6 +41,26 @@ module.exports = {
 						if (err) res.status(500).end();
 					});
 
+			},
+			rename(req, res) {
+				neuron_model.renameById(req.params.uuid, req.body.name)
+					.then( neuron => {
+						res.status(200).send(neuron);
+					})
+					.catch(err => {
+						console.log(err);
+						res.status(500).end();
+					});
+			},
+			delete(req, res) {
+				neuron_model.deleteById(req.params.uuid)
+					.then( message => {
+						res.status(200).end(message);
+					})
+					.catch(err => {
+						console.log(err);
+						res.status(500).end();
+					});
 			}
 		}
 	}

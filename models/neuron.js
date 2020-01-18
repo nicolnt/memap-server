@@ -3,7 +3,7 @@ const neoDriver = require('../db').driver;
 
 module.exports = {
 
-	getNeuronById(id) {
+	getNeuronById(uuid) {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
 			session.run(`
@@ -12,11 +12,11 @@ module.exports = {
 		RETURN neuron
 			`,
 				{
-					"uuid": id 
+					uuid
 				})
 				.then(result => { // INFO: You must put RETURN n.label AS label -> get('label'), otherwise if RETURN n.label -> get('n.label')
 
-					let data;
+					let data = {};
 
 					/* OPTIMIZE: There si a more straightforward approach, see below
 					// NOTE: very important to check on result.records because it is illegal to .get() on a non-existing record
@@ -52,7 +52,62 @@ module.exports = {
 
 		});
 	},
+	deleteById(uuid) {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
+			session.run(`
+			MATCH (n:Neuron {uuid: $uuid})
+			DETACH DELETE n
+			`,
+				{
+					uuid
+				})
+				.then(result => {
 
+					let data = {};
+					//if (result.records.length >= 1 ) data = result.records[0].get('neuron').properties;
+					if (result.summary.counters.updates().nodesDeleted != 1) data.message = "No Neuron deleted"; 
+					else data.message = "One Neuron deleted";
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
+
+	renameById(uuid, name) {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
+			session.run(`
+		MATCH (n:Neuron {uuid: $uuid})
+		SET n.name = $name
+		RETURN n AS neuron
+			`,
+				{
+					uuid,
+					name
+				})
+				.then(result => {
+
+					let data = {};
+					if (result.records.length >= 1 ) data = result.records[0].get('neuron').properties;
+
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
 	createNeuron(neuron) {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
