@@ -194,7 +194,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\":\"new Type\"\n}",
+							"raw": "{\n\t\"name\":\"new Type 2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -526,7 +526,7 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "myFirstFile",
+									"value": "myFirstFileUpload",
 									"type": "text"
 								},
 								{
@@ -723,7 +723,7 @@
 					"response": []
 				},
 				{
-					"name": "Get an Icon by Name",
+					"name": "Get an Icon by UUID",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -735,7 +735,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/icon/{{IconName}}",
+							"raw": "http://localhost:3000/icon/{{IconUUID}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -743,14 +743,14 @@
 							"port": "3000",
 							"path": [
 								"icon",
-								"{{IconName}}"
+								"{{IconUUID}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Edit Icon by Name",
+					"name": "Edit Icon by UUID",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -763,7 +763,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\":\"Yoooooooo\",\n\t\"path\": \"here now.jpg\"\n}",
+							"raw": "{\n\t\"name\":\"Yoooooooo\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -771,7 +771,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/icon/{{IconName}}",
+							"raw": "http://localhost:3000/icon/{{IconUUID}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -779,14 +779,14 @@
 							"port": "3000",
 							"path": [
 								"icon",
-								"{{IconName}}"
+								"{{IconUUID}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete an Icon by Name",
+					"name": "Delete an Icon by UUID",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -798,7 +798,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/icon/{{IconName}}",
+							"raw": "http://localhost:3000/icon/{{IconUUID}}",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -806,7 +806,7 @@
 							"port": "3000",
 							"path": [
 								"icon",
-								"{{IconName}}"
+								"{{IconUUID}}"
 							]
 						}
 					},
@@ -977,38 +977,38 @@
 	],
 	"variable": [
 		{
-			"id": "4ee7b129-0dcd-4fd4-bba3-cd8a30406cda",
-			"key": "FileUUID",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"id": "d8defd39-7b43-4c31-86f2-9d0c422b5e97",
-			"key": "DocumentUUID",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"id": "9e48f1c3-4884-422b-9f14-67cf1eae14a3",
+			"id": "7ae4b5eb-cec2-436a-9cb3-ede076c809da",
 			"key": "NeuronUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "46141f39-c185-4da7-bc30-0cfaabc4b587",
-			"key": "IconName",
+			"id": "f41b92e1-ccd3-45c8-8fee-d9233f368d99",
+			"key": "DocumentUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "d082dd18-3a27-41e4-aa7e-947db514a722",
+			"id": "c61033d9-afa2-4f17-b16a-1974d8a128c1",
+			"key": "IconUUID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "abef41b9-dd91-4a39-9a73-23889f93e2b6",
 			"key": "TagName",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "44f33727-472d-4fdc-b78e-7b75d25cd584",
+			"id": "34de26f5-1e33-480c-9b5c-3ea6f60ec53a",
 			"key": "TypeName",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "48017115-b8b0-4f85-a16f-917fabb91774",
+			"key": "FileUUID",
 			"value": "",
 			"type": "string"
 		}
