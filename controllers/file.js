@@ -37,7 +37,8 @@ module.exports = {
 			byCopy(req, res) {
 				const file_uuid = uuid.v4();
 				const file = req.files.file.name.match(/(?<name>[^\.]+)\.(?<ext>.+)/).groups;
-				const newPathToFile = path.join(__dirname, '../database/files', file_uuid + '.' + file.ext);
+				const newFileName = file_uuid + '.' + file.ext;
+				const newPathToFile = path.join(__dirname, '../database/files', newFileName);
 
 				req.files.file.mv(newPathToFile, err => {
     			if(err) {
@@ -45,7 +46,7 @@ module.exports = {
 					}
 					else {
 						console.log('File uploaded:', req.files.file.name, 'as: ', newPathToFile);
-						file_model.addNewFile(newPathToFile, file_uuid, file.name)
+						file_model.addNewFile(newFileName, file_uuid, file.name)
 							.then(json => {
 								console.log(json);
 								res.status(200).send({file_uuid});
@@ -62,14 +63,14 @@ module.exports = {
 		file: {
 			byIdFile(req, res) {
 				file_model.deleteFileById(req.params.uuid)
-					.then(path => {
-						if (path) fs.unlink(path, err => {
+					.then(filepath => {
+						if (filepath) fs.unlink(filepath, err => {
 							if (err) {
 								console.log(err);
 								res.status(500).end();
 							}
 							else {
-								console.log('File', path, 'deleted successfully!');
+								console.log('File', filepath, 'deleted successfully!');
 								res.status(200).end();
 							}
 						})

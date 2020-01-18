@@ -86,7 +86,9 @@ module.exports = {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
 			session.run(`
 			MATCH (i:Icon {name: $name})
+			WITH i.path AS path, i
 			DELETE i
+			RETURN path
 			`,
 				{
 					name
@@ -94,6 +96,9 @@ module.exports = {
 				.then(result => {
 
 					let data = {};
+
+					if (result.records.length >= 1 ) data = result.records[0].get('path');
+
 					resolve( data );
 				})
 				.catch(error => {
