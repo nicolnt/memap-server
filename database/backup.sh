@@ -1,9 +1,8 @@
 #! /bin/sh
 
-
 # Usage: 
 
-# ./backup.sh to do a simple timestamped backup of the graph.db, it goes into ./backups/graph_backup_DATE-%y-%m-%d_TIME-%H-%M-%S.tar.gz
+# ./backup.sh to do a simple timestamped backup of the graph.db, it goes into databases/backups/graph_backup_DATE-%y-%m-%d_TIME-%H-%M-%S.tar.gz
 
 # ./backup.sh myOtherBackup.tar.gz to do a named backup of the graph.db, it goes where you specified with the name myOtherBackup.tar.gz
 
@@ -17,10 +16,7 @@ SCRIPT_LOCATION="`dirname \"$0\"`"
 
 DATABASE="graph.db"
 
-if [ ! -d backups ]
-then
-	mkdir backups
-fi
+mkdir -p $SCRIPT_LOCATION/databases/backups
 
 if [ $1 ]
 then
@@ -33,7 +29,7 @@ then
 	fi
 else
 	rsync --archive $NEO4J_HOME/data/databases/$DATABASE $SCRIPT_LOCATION/db/
-	tar --create --auto-compress --file backups/graph_backup_$(date "+DATE-%y-%m-%d_TIME-%H-%M-%S").tar.gz --directory=db graph.db
+	tar --create --auto-compress --file $SCRIPT_LOCATION/backups/graph_backup_$(date "+DATE-%y-%m-%d_TIME-%H-%M-%S").tar.gz --directory=$SCRIPT_LOCATION/db/ graph.db
 fi
 
 # tar --create --auto-compress --file backup-1.tar.gz db/graph.db
