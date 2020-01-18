@@ -10,6 +10,8 @@ module.exports = function(app) {
 	// NOTE: passing a callback that takes (req, res, next)
 	
 	router.get('/:id', neuron_controller.read.entireNeuron.byIdNeuron);
+	router.patch('/:uuid', express.json(), neuron_controller.write.neuron.rename);
+	router.delete('/:uuid', neuron_controller.write.neuron.delete);
 	router.post('/', express.json(), neuron_controller.write.neuron.entire);
 	//router.get('/id/:title', neuron_controller.read.idNeuron.byTitleNeuron);
 
