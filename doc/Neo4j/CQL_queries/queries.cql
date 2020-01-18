@@ -15,6 +15,15 @@ WHERE center.uuid = "fb759973-2a7d-472b-ba94-23872f766692" // Center Node
 RETURN n AS node, TYPE(r) AS type, STARTNODE(r).uuid AS from 
 
 
+// NOTE: build a custom object
+MATCH (center:Neuron {uuid: $uuid})-[r]-(n:Neuron)
+WITH {
+	type: TYPE(r),
+    from: STARTNODE(r).uuid
+} AS rel, n
+RETURN n, rel
+
+
 // Bad IDEA: D'abord on créé après on lie (nope)
 // INFO: On peut faire la liaison et la créa direct
 // NOTE: RELATION must have a direction on CREATE

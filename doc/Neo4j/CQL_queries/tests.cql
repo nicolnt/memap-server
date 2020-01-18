@@ -23,3 +23,36 @@ WITH from, to, rel
 FOREACH( t IN CASE WHEN rel.type = "friend" THEN [1] ELSE [] END | 
 		CREATE (from)-[r:IS_FRIEND]->(to) )
 
+
+
+			MATCH (from:Neuron {uuid: $rel.uuidFrom})
+			MATCH (to:Neuron {uuid: $rel.uuidTo})
+			WITH from, to
+			FOREACH( t IN CASE WHEN $rel.type = "parent" THEN [1] ELSE [] END | 
+					CREATE (from)-[r:IS_PARENT]->(to) )
+			WITH from, to
+			FOREACH( t IN CASE WHEN $rel.type = "friend" THEN [1] ELSE [] END | 
+					CREATE (from)-[r:IS_FRIEND]->(to) )
+			RETURN from, to
+
+
+MATCH ()-[r]-()
+WHERE ID(r) IN [26, 5, 25, 4, 24]
+DELETE r
+
+			MATCH (from:Neuron {uuid: $rel.uuidFrom})-[r]-(to:Neuron {uuid: $rel.uuidTo})
+			WITH from, to, r
+			FOREACH( t IN CASE WHEN $rel.type = "parent" THEN [1] ELSE [] END | 
+					DELETE (from)-[r:IS_PARENT]-(to) )
+			WITH from, to, r
+			FOREACH( t IN CASE WHEN $rel.type = "friend" THEN [1] ELSE [] END | 
+					DELETE (from)-[r:IS_FRIEND]-(to) )
+			RETURN from, to
+
+MATCH (center:Neuron {uuid: $uuid})-[r]-(n:Neuron)
+	RETURN n, TYPE(r) AS rel.type, STARTNODE(r).uuid AS rel.from
+
+MATCH (from {name: "C"})-[r]-(to {name: "B"})
+WHERE TYPE(r) = $type
+DELETE r
+RETURN from, to
