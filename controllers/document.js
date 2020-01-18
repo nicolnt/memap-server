@@ -73,7 +73,21 @@ module.exports = {
 						if (err) res.status(500).send(err);
 						res.end();
 					});
+			},
+			
+			delete(req, res) {
+
+				// NOTE: Passing the request body, it has to match with the db properties !!
+				document_model.deleteDocument(req.params.id)
+					.then(() => {	
+						res.status(200).send({});
+					})
+					.catch(err => {
+						if (err) res.status(500).send(err);
+						res.end();
+					});
 			}
+
 		}
 
 	}

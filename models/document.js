@@ -93,7 +93,7 @@ module.exports = {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE});
 			session.run(`
 			MATCH (d:Document) WHERE d.uuid = $uuid
-			SET d = $props,
+			SET d += $props,
 			d.dateEdit = TIMESTAMP(),
 			d.dateConsult = TIMESTAMP()
 			RETURN d
@@ -105,6 +105,30 @@ module.exports = {
 				.then(result => {
 					if (result.records.length >= 1 ) resolve();
 					else reject();
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
+
+	deleteDocument(id) {
+
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE});
+			session.run(`
+			MATCH (d:Document) WHERE d.uuid = $uuid
+			DELETE d
+			`,
+				{
+					"uuid": id,
+				})
+				.then(result => {
+					resolve();
 				})
 				.catch(error => {
 					reject( error );
