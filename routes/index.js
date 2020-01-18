@@ -16,4 +16,5 @@ module.exports = function(app) {
 	require('./document')(app); 
 	require('./icon')(app); 
 	require('./file')(app);
+	require('./tag')(app);
 }
