@@ -29,3 +29,7 @@ WantedBy=multi-user.target
 ## Managing databases
 Backup databases in `$NEO4J_HOME/data/databases/*.db`
 Add db by adding this line in `$NEO4J_CONF/neo4j.conf` `dbms.active_database={ my new db name }.db`
+
+## Indexes and constraints
+ `DROP CONSTRAINT ON (n:Node) ASSERT n.uuid IS UNIQUE`
+ `CREATE CONSTRAINT ON (mynode:MyNodeLabel) ASSERT mynode.myUUIDField IS UNIQUE`

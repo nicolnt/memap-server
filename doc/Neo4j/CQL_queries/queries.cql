@@ -6,6 +6,12 @@ CREATE (n:Node:Neuron:AWESOME)
 MATCH (n)
 RETURN LABELS(n)
 
+// NOTE: Rename a property
+MATCH (c:Category)
+WHERE c.name IS NULL
+SET c.name = c.title
+REMOVE c.title
+
 
 // NOTE: Get network around a node
 // INFO: TYPE( r ) to get relation 'r' type eg. IS_FRIEND
