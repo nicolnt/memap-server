@@ -12,7 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-    "neo4j-driver": "^4.0.1"
+    "express-fileupload": "^1.1.6",
+    "neo4j-driver": "^4.0.1",
+    "uuid": "^3.4.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

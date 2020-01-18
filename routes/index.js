@@ -14,7 +14,5 @@ module.exports = function(app) {
 	require('./neuron')(app);
 	require('./document')(app); 
 	require('./icon')(app); 
-
-	// TODO:
-	//require('./files')(app);
+	require('./file')(app);
 }
