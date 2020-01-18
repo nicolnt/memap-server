@@ -5,7 +5,7 @@ module.exports = {
 		closeGraph: {
 			byIdNeuron(req, res) {
 
-				network_model.getCloseNetworkByNeuronId(req.params.id)
+				network_model.getCloseNetworkByNeuronId(req.params.uuid)
 					.then(data => {
 
 						const json = {

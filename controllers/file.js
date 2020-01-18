@@ -9,7 +9,7 @@ module.exports = {
 		file: {
 			byIdFile(req, res) {
 
-				file_model.getFileById(req.params.id)
+				file_model.getFileById(req.params.uuid)
 					.then(data => {
 
 						const json = {
@@ -32,7 +32,7 @@ module.exports = {
 	upload: {
 		singleFile: {
 			byReference(req, res) {
-				// TODO: no upload
+				// TODO: no upload but reference to local file
 			},
 			byCopy(req, res) {
 				const file_uuid = uuid.v4();
@@ -61,7 +61,7 @@ module.exports = {
 	delete: {
 		file: {
 			byIdFile(req, res) {
-				file_model.deleteFileById(req.params.id)
+				file_model.deleteFileById(req.params.uuid)
 					.then(path => {
 						if (path) fs.unlink(path, err => {
 							if (err) {
@@ -85,7 +85,7 @@ module.exports = {
 		file: {
 
 			name(req, res) {
-				file_model.renameFileById(req.params.id, req.body.name)
+				file_model.renameFileById(req.params.uuid, req.body.name)
 					.then(json => {
 						res.status(200).end();
 					})

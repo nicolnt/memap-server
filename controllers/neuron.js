@@ -5,7 +5,7 @@ module.exports = {
 		entireNeuron: {
 			byIdNeuron(req, res, next) {
 
-				neuron_model.getNeuronById(req.params.id)
+				neuron_model.getNeuronById(req.params.uuid)
 					.then(data => {
 
 						const json = {
