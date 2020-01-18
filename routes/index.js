@@ -12,6 +12,7 @@ module.exports = function(app) {
 	app.use('/static', express.static(path.join(__dirname, '../', 'public')));
 
 	require('./neuron')(app);
+	require('./network')(app);
 	require('./document')(app); 
 
 	// TODO:
