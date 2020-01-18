@@ -1,7 +1,27 @@
-MATCH (p:Neuron) WHERE p.uuid = $uuid
-MERGE (n:Neuron {title: 'N7'})
-SET n.uuid = (n.title + '0b962e-041c-11e1-9234-0123456789ab')
-CREATE (n)-[:PARENT]->(p)
+// NOTE: Nodes can have multiple labels
+CREATE (n:Node:Neuron:AWESOME)
+
+
+// INFO: LABELS( n ) to get an array of an node 'n' labels
+MATCH (n)
+RETURN LABELS(n)
+
+
+// NOTE: Get network around a node
+// INFO: TYPE( r ) to get relation 'r' type eg. IS_FRIEND
+// INFO: STARTNODE( r ) to get the starting node in a relation 'r' like (a)-[r]->(b) it is 'a'
+MATCH (center:Neuron)-[r]-(n:Neuron)
+WHERE center.uuid = "fb759973-2a7d-472b-ba94-23872f766692" // Center Node
+RETURN n AS node, TYPE(r) AS type, STARTNODE(r).uuid AS from 
+
+
+// NOTE: build a custom object
+MATCH (center:Neuron {uuid: $uuid})-[r]-(n:Neuron)
+WITH {
+	type: TYPE(r),
+    from: STARTNODE(r).uuid
+} AS rel, n
+RETURN n, rel
 
 
 // Bad IDEA: D'abord on créé après on lie (nope)
@@ -24,33 +44,18 @@ MATCH (n:Neuron)--(n1:Neuron {title:"N8"}) RETURN n
 // NOTE: Also possible without the quotes
 :params {ids:[ {id:1}, {id:2}, {id:3} ]}
 
+
 // Then do a batch create
 UNWIND $ids AS id // INFO: AS is necessary
 CREATE (n:Node)
 SET n.uId = id.id,
 n.name = ("name " + id.id)
 
+
 :params {"uniqueId":2}
 
-// BUG: Bad test 1
-CREATE (new:Node {uId: 4})
-MATCH (n2:Node {uId: $uniqueId})
-CREATE (new)-[r]-(n2)
-RETURN r
 
-// BUG: Bad test 2
-CREATE (new:Node {uId: 4, name: ("name "+$uniqueId)}),
-(new)-[r:FRIEND]->(n2:Node {uId: $uniqueId})
-SET new.name = "name 4"
-RETURN r
-
-// BUG: Bad test 3
-CREATE (new:Node {uId: 4}),
-(new)-[r:FRIEND]->(n2:Node {uId: $uniqueId})
-SET new.name = "name 4"
-RETURN r
-
-// BUG: Bad test 4 - works when uniqueId exists among Nodes
+// BUG: Bad test - works when uniqueId exists among Nodes
 MATCH (n2:Node {uId: $uniqueId})
 CREATE (new:Node {uId: 4}),
 (new)-[r:FRIEND]->(n2)
@@ -71,7 +76,7 @@ RETURN r
 MATCH (n:Node) RETURN n LIMIT 25
 
 
-// INFO: You must delete node's relations before deleting the actual node
+// NOTE: You must delete node's relations before deleting the actual node
 MATCH (n:Node)-[r]-(n2:Node)
 DELETE r // remove relation
 WITH r // FIXME: WITH is necessary with a variable
@@ -90,6 +95,7 @@ MATCH (n2)
 WITH n1
 RETURN n1 // n2 is out of scope here
 
+
 // NOTE: Using aggregating and list functions
 MATCH (n:Node)
 WITH collect(n) AS nList // Pipe Nodes as a collection -> [{},{},{}]
@@ -105,7 +111,6 @@ SET new = properties,
 new.dateCreated = TIMESTAMP(),
 new.dateConsult = TIMESTAMP(),
 new.dateEdit = TIMESTAMP()
-
 RETURN new
 
 
@@ -119,8 +124,24 @@ ELSE
 END 
 AS time
 
+
 // NOTE: Rename a property
 MATCH(n:Neuron)
 WHERE EXISTS(n.dateCreation)
 SET n.dateCreated = n.dateCreation
 REMOVE n.dateCreation
+
+
+// NOTE: Use If-Else alternative with the FOREACH
+// INFO prototype du foreach: FOREACH ( { item } IN { collection } | { opration } )
+UNWIND $rels AS rel
+MATCH (from:Neuron)
+	WHERE from.uuid = rel.uuidFrom
+MATCH (to:Neuron)
+	WHERE to.uuid = rel.uuidTo
+WITH from, to, rel
+FOREACH( t IN CASE WHEN rel.type = "parent" THEN [1] ELSE [] END | // Le CASE renvoit des tableaux
+		CREATE (from)-[r:IS_PARENT]->(to) )
+WITH from, to, rel
+FOREACH( t IN CASE WHEN rel.type = "friend" THEN [1] ELSE [] END | 
+		CREATE (from)-[r:IS_FRIEND]->(to) )
