@@ -3,15 +3,15 @@ const neoDriver = require('../db').driver;
 
 module.exports = {
 
-	getIconByName(name) {
+	getIconByUUID(uuid) {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
 			session.run(`
-			MATCH (i:Icon {name: $name})
+			MATCH (i:Icon {uuid: $uuid})
 			RETURN i AS icon
 			`,
 				{
-					name
+					uuid
 				})
 				.then(result => {
 
@@ -54,17 +54,17 @@ module.exports = {
 				});
 		});
 	},
-	editIcon(name, props) {
+	renameIcon(uuid, name) {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
 			session.run(`
-			MATCH (i:Icon {name: $name})
-			SET i += $props
+			MATCH (i:Icon {uuid: $uuid})
+			SET i.name = $name
 			RETURN i AS icon
 			`,
 				{
-					name,
-					props
+					uuid,
+					name
 				})
 				.then(result => {
 
@@ -81,25 +81,23 @@ module.exports = {
 				});
 		});
 	},
-	deleteIcon(name) {
+	deleteIcon(uuid) {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
 			session.run(`
-			MATCH (i:Icon {name: $name})
-			WITH i.path AS path, i
+			MATCH (i:Icon {uuid: $uuid})
+			WITH i.uuid AS uuid, i.extension AS ext, i
 			DELETE i
-			RETURN path
+			RETURN uuid, ext
 			`,
 				{
-					name
+					uuid
 				})
 				.then(result => {
 
-					let data = {};
+					if (result.records.length >= 1 ) var path = result.records[0].get('uuid') + '.' + result.records[0].get('ext');
 
-					if (result.records.length >= 1 ) data = result.records[0].get('path');
-
-					resolve( data );
+					resolve( path );
 				})
 				.catch(error => {
 					reject( error );

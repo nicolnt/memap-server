@@ -10,16 +10,12 @@ module.exports = {
 			byIdFile(req, res) {
 
 				file_model.getFileById(req.params.uuid)
-					.then(data => {
+					.then(file => {
 
-						const json = {
-							file: data
-						}
+						if (file) res.status(200);
+ 						else res.status(404);
 
-						if (data) res.status(200);
- 						else res.send(404);
-
-						res.send(json);
+						res.send(file);
 					})
 					.catch(err => {
 						if (err) res.status(500);
@@ -38,7 +34,9 @@ module.exports = {
 				const file_uuid = uuid.v4();
 				const file = req.files.file.name.match(/(?<name>[^\.]+)\.(?<ext>.+)/).groups;
 				const newFileName = file_uuid + '.' + file.ext;
-				const newPathToFile = path.join(__dirname, '../database/files', newFileName);
+				const newPathToFile = path.join(__dirname, '../public/files', newFileName);
+				
+				if (req.body.name) file.name = req.body.name;
 
 				req.files.file.mv(newPathToFile, err => {
     			if(err) {
@@ -46,10 +44,10 @@ module.exports = {
 					}
 					else {
 						console.log('File uploaded:', req.files.file.name, 'as: ', newPathToFile);
-						file_model.addNewFile(newFileName, file_uuid, file.name)
-							.then(json => {
-								console.log(json);
-								res.status(200).send({file_uuid});
+						file_model.addNewFile(file_uuid, file.name, file.ext)
+							.then(file => {
+								console.log(file);
+								res.status(200).send(file);
 							})
 							.catch(err => {
 							console.log(err);
@@ -64,6 +62,7 @@ module.exports = {
 			byIdFile(req, res) {
 				file_model.deleteFileById(req.params.uuid)
 					.then(filepath => {
+						filepath = path.join(__dirname, '../public/files', filepath);
 						if (filepath) fs.unlink(filepath, err => {
 							if (err) {
 								console.log(err);
@@ -87,8 +86,8 @@ module.exports = {
 
 			name(req, res) {
 				file_model.renameFileById(req.params.uuid, req.body.name)
-					.then(json => {
-						res.status(200).end();
+					.then(file => {
+						res.status(200).send(file);
 					})
 					.catch(err => {
 						console.log(err);

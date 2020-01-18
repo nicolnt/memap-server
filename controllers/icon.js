@@ -7,9 +7,9 @@ const icon_model = require('../models/icon');
 module.exports = {
 	read: {
 		entireIcon: {
-			byIconName(req, res) {
+			byUUID(req, res) {
 
-				icon_model.getIconByName(req.params.name)
+				icon_model.getIconByUUID(req.params.uuid)
 					.then(icon => {
 
 						if (icon) res.status(200);
@@ -31,14 +31,18 @@ module.exports = {
 			const file = req.files.icon.name.match(/([^\.]+)\.(?<ext>.+)/).groups;
 			const newIconFilename = icon_uuid + '.' + file.ext;
 			const newPathToIcon = path.join(__dirname, '../public/icons', newIconFilename);
+
+			if (req.body.name) file.name = req.body.name;
+
 			req.files.icon.mv(newPathToIcon, err => {
     		if(err) {
 					res.status(500).end();
 				}
 				else {
 					const newIcon = {
-						name: req.body.name,
-						path: newIconFilename
+						name: file.name,
+						uuid: icon_uuid,
+						extension: file.ext
 					};
 
 					icon_model.createIcon(newIcon)
@@ -51,9 +55,9 @@ module.exports = {
 				}
 			});
 		},
-		edit(req, res) {
+		rename(req, res) {
 
-			icon_model.editIcon(req.params.name, req.body)
+			icon_model.renameIcon(req.params.uuid, req.body.name)
 				.then( icon => {
 					res.status(200).send( icon );
 				})
@@ -63,10 +67,10 @@ module.exports = {
 		}
 	},
 	delete(req, res) {
-		icon_model.deleteIcon(req.params.name)
+		icon_model.deleteIcon(req.params.uuid)
 			.then( iconFileName => {
 				const iconPath = path.join(__dirname, '../public/icons', iconFileName)
-				if (path) fs.unlink(iconPath, err => {
+				if (iconFileName) fs.unlink(iconPath, err => {
 					if (err) {
 						console.log(err);
 						res.status(500).end();

@@ -32,18 +32,18 @@ module.exports = {
 		});
 	},
 
-	addNewFile(path, uuid, name) {
+	addNewFile(uuid, name, ext) {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
 			session.run(`
-				CREATE (f:File {name:$name, path:$path, uuid: $uuid})
+				CREATE (f:File {uuid: $uuid, name:$name, extension: $ext})
 				SET f.dateAdded = TIMESTAMP(), f.dateConsulted = TIMESTAMP()
 				RETURN f AS file
 			`,
 				{
 					uuid,
-					path,
-					name
+					name,
+					ext
 				})
 				.then(result => { 
 
@@ -67,20 +67,18 @@ module.exports = {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
 			session.run(`
 				MATCH (f:File {uuid: $uuid})
-				WITH f.path AS path, f
+				WITH f.extension AS extension, f.uuid AS uuid, f
 				DELETE f
-				RETURN path
+				RETURN uuid, extension
 			`,
 				{
 					uuid
 				})
 				.then(result => { 
 
-					let data = {};
+					if (result.records.length >= 1 ) var path = result.records[0].get('uuid') + '.' + result.records[0].get('extension');
 
-					if (result.records.length >= 1 ) data = result.records[0].get('path');
-
-					resolve( data );
+					resolve( path );
 				})
 				.catch(error => {
 					reject( error );
