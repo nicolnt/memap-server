@@ -23,6 +23,29 @@ module.exports = {
 					});
 
 			}
+		},
+		allNeurons: {
+			pinned(req, res) {
+				neuron_model.getAllPinnedNeurons()
+					.then( neurons => {
+						res.status(200).send(neurons);
+					})
+					.catch(err => {
+						console.log(err);
+						res.status(500).end();
+					})
+			},
+
+			selected(req, res) {
+				neuron_model.getAllSelectedNeurons()
+					.then( neurons => {
+						res.status(200).send(neurons);
+					})
+					.catch(err => {
+						console.log(err);
+						res.status(500).end();
+					})
+			},
 		}
 	},
 
