@@ -33,8 +33,8 @@ module.exports = {
 	write: {
 
 		create(req, res) {
-
-			tag_model.createTag(req.body.name)
+			let model = (req.body.icon)?tag_model.createTagWithIcon:tag_model.createTagWithoutIcon;
+			model(req.body)
 				.then( tag => {
 					res.status(200).send( tag );
 				})
@@ -43,8 +43,10 @@ module.exports = {
 				});
 
 		},
-		rename(req, res) {
-			tag_model.rename(req.params.name, req.body.name)
+		edit(req, res) {
+			let model = (req.body.icon)? tag_model.renameAndChangeIcon : tag_model.rename;
+
+			model(req.params.name, req.body)
 				.then( tag => {
 					res.status(200).send(tag);
 				})
@@ -53,8 +55,20 @@ module.exports = {
 					res.status(500).end();
 				});
 		},
-		delete(req, res) {
-			tag_model.deleteByName(req.params.name)
+		deleteAll(req, res) {
+			tag_model.deleteAll()
+				.then( message => {
+					res.status(200).send(message);
+				})
+				.catch(err => {
+					console.log(err);
+					res.status(500).end();
+				});
+		},
+		deleteOne(req, res) {
+			const model = (Object.keys(req.body).length) ? tag_model.removeIcon : tag_model.deleteByName;
+
+			model(req.params.name)
 				.then( message => {
 					res.status(200).send(message);
 				})
