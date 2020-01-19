@@ -56,3 +56,27 @@ MATCH (from {name: "C"})-[r]-(to {name: "B"})
 WHERE TYPE(r) = $type
 DELETE r
 RETURN from, to
+
+// NOTE: relationship is optionnal
+MATCH (t:Type)
+WHERE t.name = $name
+OPTIONAL MATCH (t)-[:ICON]-(i:Icon)
+RETURN t AS type, i AS icon
+
+// NOTE: Create relationship
+MATCH (t:Type {name:$name})
+MATCH (i:Icon {uuid: "112c2319-14d7-490d-8d53-3bd896eae22f"})
+MERGE (t)-[r]->(i)
+RETURN t AS type, i AS icon
+
+// NOTE: change relationship type name
+MATCH (f:Foo)-[rel:FOOBAR]->(b:Bar)
+CALL apoc.refactor.setType(rel, 'NEW-TYPE')
+YIELD input, output
+RETURN input, output
+
+
+MATCH (t:Type {name: $name})
+OPTIONAL MATCH (t)-[r:HAS_ICON]-(i:Icon)
+DELETE r
+RETURN t AS type

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon app.js",
-    "run": "node app.js"
+    "debug": "node --inspect app.js",
+    "serve": "node app.js"
   },
   "keywords": [],
   "author": "Nicolas LIENART",
