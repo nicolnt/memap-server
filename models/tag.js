@@ -279,7 +279,8 @@ module.exports = {
 			RETURN t AS tag, i AS icon
 			`,
 				{
-					name: props.name
+					name: props.name,
+					iconUUID
 				})
 				.then(result => {
 					if (result.records.length >= 1 ) {

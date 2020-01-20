@@ -12,9 +12,10 @@ module.exports = function(app) {
 
 	// NOTE: passing a callback that takes (req, res, next)
 	
-	router.get('/:uuid', neuron_controller.read.entireNeuron.byIdNeuron);
-	router.patch('/:uuid', express.json(), neuron_controller.write.neuron.rename);
-	router.delete('/:uuid', neuron_controller.write.neuron.delete);
+	router.get('/:uuid', neuron_controller.read.entireNeuron.byUUID);
+	router.patch('/:uuid', express.json(), neuron_controller.write.neuron.edit);
+	router.put('/:uuid', express.json(), neuron_controller.write.neuron.add);
+	router.delete('/:uuid', express.json(),neuron_controller.write.neuron.delete);
 	router.post('/', express.json(), neuron_controller.write.neuron.entire);
 
 };
