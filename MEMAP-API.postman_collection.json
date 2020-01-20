@@ -42,7 +42,43 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\":\"Montag\"\n}",
+							"raw": "{\n\t\"name\":\"tagB\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/tag/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tag",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new Tag with Icon",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"tagB\",\n\t\"icon\": \"{{IconUUID}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -92,7 +128,7 @@
 					"response": []
 				},
 				{
-					"name": "Edit Tag by Name",
+					"name": "Rename Tag by Name",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -106,6 +142,78 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n\t\"name\":\"Yoooooooo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/tag/{{TagName}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tag",
+								"{{TagName}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Rename Tag and change Icon by Name",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"Yoooooooo\",\n\t\"icon\":\"{{IconUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/tag/{{TagName}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tag",
+								"{{TagName}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Icon of Tag by Name",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"icon\":\"{{IconUUID}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -153,6 +261,69 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Delete all Tags",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/tag/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tag",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Icon from Tag by Name",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"icon\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/tag/{{TagName}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"tag",
+								"{{TagName}}"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -181,7 +352,7 @@
 					"response": []
 				},
 				{
-					"name": "Add new Type",
+					"name": "Add new Type | with color | without icon",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -194,7 +365,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\":\"new Type 2\"\n}",
+							"raw": "{\n\t\"name\":\"new new Type\",\n\t\"color\":\"blue\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -217,7 +388,115 @@
 					"response": []
 				},
 				{
-					"name": "Get an Type by Name",
+					"name": "Add new Type | with color | with icon",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"typeA\",\n\t\"color\":\"red\",\n\t\"icon\": \"{{IconUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/type/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"type",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new Type | without color | without icon",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"new Type without color and icon\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/type/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"type",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new Type | without color | with icon",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"new Type with icon\",\n\t\"icon\": \"{{IconUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/type/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"type",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Type by Name",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -244,7 +523,7 @@
 					"response": []
 				},
 				{
-					"name": "Edit Type by Name",
+					"name": "Edit Type by Name | with color | without icon",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -257,7 +536,151 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\":\"new type name 222\"\n}",
+							"raw": "{\n\t\"name\":\"heyHey\",\n\t\"color\": \"3e3eeee3e\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/type/{{TypeName}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"type",
+								"{{TypeName}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Type by Name | with  color|  with icon",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"change on type without color\",\n\t\"color\":\"newColor\",\n\t\"icon\":\"{{IconUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/type/{{TypeName}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"type",
+								"{{TypeName}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Type by Name | with  color|  with icon | without name",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"color\":\"newColor\",\n\t\"icon\":\"{{IconUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/type/{{TypeName}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"type",
+								"{{TypeName}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Type by Name | without  color|  without icon",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"change on type without color\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/type/{{TypeName}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"type",
+								"{{TypeName}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Type by Name | without  color|  with icon",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"change on type without color\",\n\t\"icon\":\"{{IconUUID}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -305,6 +728,141 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Delete All Types",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/type/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"type",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Type icon by Name",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"icon\":true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/type/{{TypeName}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"type",
+								"{{TypeName}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Type color by Name",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"color\":true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/type/{{TypeName}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"type",
+								"{{TypeName}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Type icon and color by Name",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"color\":true,\n\t\"icon\":true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/type/{{TypeName}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"type",
+								"{{TypeName}}"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -320,8 +878,8 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
@@ -349,69 +907,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Neuron by ID",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/neuron/fb759973-2a7d-472b-ba94-23872f766692",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"neuron",
-								"fb759973-2a7d-472b-ba94-23872f766692"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get SELECTED Neuron(s)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/selected/neuron/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"selected",
-								"neuron",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get PINNED Neuron(s)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:3000/pinned/neuron/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"pinned",
-								"neuron",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Rename Neuron by UUID",
+					"name": "Edit Neuron Name",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -428,19 +924,439 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"My New Name\"\n}",
+							"raw": "{\n\t\"name\": \"My New zdqffdzName\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
 								}
 							}
 						},
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Neuron tags",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"tags\": [\n\t\t{\"name\":\"{{TagName}}\"},\n\t\t{\"name\":\"{{TagName2}}\"}\n\t]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Neuron remove all tags",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"tags\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Neuron type",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"type\":\"{{TypeName}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Neuron remove type",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"type\":\"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Neuron icon",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"icon\":\"{{IconUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Neuron with all details",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"neuron\": {\n\t\t\"name\":\"euh alllasall??\"\n\t},\n\t\"tags\": [\n\t\t{\"name\":\"{{TagName}}\"},\n\t\t{\"name\":\"{{TagName2}}\"}\n\t\t],\n\t\"icon\":\"{{IconUUID}}\",\n\t\"type\":\"{{TypeName}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add file to Neuron",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"file\":\"{{FileUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Select Neuron",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}/select",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}",
+								"select"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unselect Neuron",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}/unselect",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}",
+								"unselect"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Neuron to favorites",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}/favorite",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}",
+								"favorite"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Neuron from favorites",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}/unfavorite",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}",
+								"unfavorite"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add document to Neuron",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"document\":\"{{DocumentUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Neuron by UUID",
+					"request": {
+						"method": "GET",
+						"header": [],
 						"url": {
 							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
 							"protocol": "http",
@@ -468,6 +1384,78 @@
 								"value": "application/json"
 							}
 						],
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove a file from Neuron",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"file\":\"{{FileUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove a document from Neuron",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"document\":\"{{DocumentUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
 							"protocol": "http",
@@ -692,7 +1680,7 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "mon_icone",
+									"value": "icooone",
 									"type": "text"
 								},
 								{
@@ -843,7 +1831,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/network/fb759973-2a7d-472b-ba94-23872f766692",
+							"raw": "http://localhost:3000/network/around/fb759973-2a7d-472b-ba94-23872f766692",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -851,6 +1839,7 @@
 							"port": "3000",
 							"path": [
 								"network",
+								"around",
 								"fb759973-2a7d-472b-ba94-23872f766692"
 							]
 						}
@@ -928,6 +1917,88 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get SELECTED Neuron(s)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/network/selected/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"network",
+								"selected",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ORPHAN Neuron(s)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/network/orphans/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"network",
+								"orphans",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get FAVORITE Neuron(s)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/network/favorites",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"network",
+								"favorites"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unselect all SELECTED Neurons",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/network/unselectAll",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"network",
+								"unselectAll"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -977,38 +2048,44 @@
 	],
 	"variable": [
 		{
-			"id": "7ae4b5eb-cec2-436a-9cb3-ede076c809da",
+			"id": "02207ede-d006-4f37-8aff-35027a1d825c",
 			"key": "NeuronUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "f41b92e1-ccd3-45c8-8fee-d9233f368d99",
+			"id": "4778f468-8853-4d79-9308-50d9cca551a2",
 			"key": "DocumentUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "c61033d9-afa2-4f17-b16a-1974d8a128c1",
+			"id": "dd686733-9735-4f64-85d7-00e292d4c2b9",
 			"key": "IconUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "abef41b9-dd91-4a39-9a73-23889f93e2b6",
-			"key": "TagName",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"id": "34de26f5-1e33-480c-9b5c-3ea6f60ec53a",
+			"id": "a5450793-3dbd-426c-9055-49ffcd337d9d",
 			"key": "TypeName",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "48017115-b8b0-4f85-a16f-917fabb91774",
+			"id": "db7f1684-d1c2-41be-85bf-5bb35b70eb4f",
 			"key": "FileUUID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "9cfd6a4a-89c1-4492-8228-137a66668412",
+			"key": "TagName",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "12c80b5c-acd3-4bb2-9d30-bbd9a91380c4",
+			"key": "TagName2",
 			"value": "",
 			"type": "string"
 		}
