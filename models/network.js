@@ -7,7 +7,7 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
 			session.run(`
-			MATCH (center:Neuron {uuid: $uuid})-[r]-(n:Neuron)
+			MATCH (center:Neuron {uuid: $uuid})-[r]-n:Neuron)
 			WITH {
 				type: TYPE(r),
     		from: STARTNODE(r).uuid
@@ -40,7 +40,159 @@ module.exports = {
 
 		});
 	},
+	getAllSelectedNeurons() {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
+			session.run(`
+			MATCH (n:Neuron:SELECTED)
+			OPTIONAL MATCH (neuron)-[:HAS_TAG]->(tag:Tag)
+			OPTIONAL MATCH (tag)-[:HAS_ICON]->(iTag:Icon)
+			OPTIONAL MATCH (neuron)-[:HAS_TYPE]->(type:Type)
+			OPTIONAL MATCH (type)-[:HAS_ICON]->(iType:Icon)
+			OPTIONAL MATCH (neuron)-[:HAS_ICON]->(icon:Icon)
+			OPTIONAL MATCH (neuron)-[:HAS_FILE]->(file:File)
+			OPTIONAL MATCH (neuron)-[:HAS_DOCUMENT]->(document:Document)
+			RETURN { 
+				neuron:neuron, 
+				tags: COLLECT(DISTINCT tag.properties), 
+				type: type.properties,
+				type_icon: iType.properties,
+				icon:icon, 
+				selected: "SELECTED" IN LABELS(neuron), 
+				favorite:"FAVORITE" IN LABELS(neuron), 
+				documents: COLLECT(DISTINCT document), 
+				files: COLLECT(DISTINCT file) 
+			} AS myNeuron
+			`)
+				.then(result => {
 
+					let data = result.records;
+					if (result.records.length >=1 ) {
+						data = data.map(neuron =>  {
+							return neuron.get('myNeuron');
+						})
+					}
+
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
+	getAllOrphanNeurons() {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
+			session.run(`
+			MATCH (neuron:Neuron) WHERE NOT (neuron)--(:Neuron)
+			OPTIONAL MATCH (neuron)-[:HAS_TAG]->(tag:Tag)
+			OPTIONAL MATCH (tag)-[:HAS_ICON]->(iTag:Icon)
+			OPTIONAL MATCH (neuron)-[:HAS_TYPE]->(type:Type)
+			OPTIONAL MATCH (type)-[:HAS_ICON]->(iType:Icon)
+			OPTIONAL MATCH (neuron)-[:HAS_ICON]->(icon:Icon)
+			OPTIONAL MATCH (neuron)-[:HAS_FILE]->(file:File)
+			OPTIONAL MATCH (neuron)-[:HAS_DOCUMENT]->(document:Document)
+			RETURN { 
+				neuron:neuron, 
+				tags: COLLECT(DISTINCT tag.properties), 
+				type: type.properties,
+				type_icon: iType.properties,
+				icon:icon, 
+				selected: "SELECTED" IN LABELS(neuron), 
+				favorite:"FAVORITE" IN LABELS(neuron), 
+				documents: COLLECT(DISTINCT document), 
+				files: COLLECT(DISTINCT file) 
+			} AS myNeuron
+			`)
+				.then(result => {
+
+					let data = result.records;
+					if (result.records.length >=1 ) {
+						data = data.map(neuron =>  {
+							return neuron.get('myNeuron');
+						})
+					}
+
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
+	getAllFavoriteNeurons() {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
+			session.run(`
+			MATCH (neuron:Neuron:FAVORITE)
+			OPTIONAL MATCH (neuron)-[:HAS_TAG]->(tag:Tag)
+			OPTIONAL MATCH (tag)-[:HAS_ICON]->(iTag:Icon)
+			OPTIONAL MATCH (neuron)-[:HAS_TYPE]->(type:Type)
+			OPTIONAL MATCH (type)-[:HAS_ICON]->(iType:Icon)
+			OPTIONAL MATCH (neuron)-[:HAS_ICON]->(icon:Icon)
+			OPTIONAL MATCH (neuron)-[:HAS_FILE]->(file:File)
+			OPTIONAL MATCH (neuron)-[:HAS_DOCUMENT]->(document:Document)
+			RETURN { 
+				neuron:neuron, 
+				tags: COLLECT(DISTINCT tag.properties), 
+				type: type.properties,
+				type_icon: iType.properties,
+				icon:icon, 
+				selected: "SELECTED" IN LABELS(neuron), 
+				favorite:"FAVORITE" IN LABELS(neuron), 
+				documents: COLLECT(DISTINCT document), 
+				files: COLLECT(DISTINCT file) 
+			} AS myNeuron
+			`)
+				.then(result => {
+
+					let data = result.records;
+					if (result.records.length >=1 ) {
+						data = data.map(neuron =>  {
+							return neuron.get('myNeuron');
+						})
+					}
+
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
+	unselectAllNeurons() {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
+			session.run(`
+			MATCH (n:Neuron:SELECTED)
+			REMOVE n:SELECTED
+			`)
+				.then(result => {
+
+					let data = result.summary.counters.updates();
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
 	createRelationship(uuidFrom, uuidTo, type) {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });

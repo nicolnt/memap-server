@@ -23,11 +23,50 @@ module.exports = {
 					});
 
 			}
+		},
+		orphanNeurons(req, res) {
+				network_model.getAllOrphanNeurons()
+					.then( neurons => {
+						res.status(200).send(neurons);
+					})
+					.catch(err => {
+						console.log(err);
+						res.status(500).end();
+					})
+		},
+		selectedNeurons(req, res) {
+				network_model.getAllSelectedNeurons()
+					.then( neurons => {
+						res.status(200).send(neurons);
+					})
+					.catch(err => {
+						console.log(err);
+						res.status(500).end();
+					})
+		},
+		favoriteNeurons(req, res) {
+				network_model.getAllFavoriteNeurons()
+					.then( neurons => {
+						res.status(200).send(neurons);
+					})
+					.catch(err => {
+						console.log(err);
+						res.status(500).end();
+					})
 		}
 	},
 
 	write: {
-
+		unselectAllNeurons(req, res) {
+				network_model.unselectAllNeurons()
+					.then( neurons => {
+						res.status(200).send(neurons);
+					})
+					.catch(err => {
+						console.log(err);
+						res.status(500).end();
+					})
+		},
 		relationship: {
 
 			single(req, res) {

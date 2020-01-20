@@ -23,35 +23,52 @@ module.exports = {
 					});
 
 			}
-		},
-		allNeurons: {
-			pinned(req, res) {
-				neuron_model.getAllPinnedNeurons()
-					.then( neurons => {
-						res.status(200).send(neurons);
-					})
-					.catch(err => {
-						console.log(err);
-						res.status(500).end();
-					})
-			},
-
-			selected(req, res) {
-				neuron_model.getAllSelectedNeurons()
-					.then( neurons => {
-						res.status(200).send(neurons);
-					})
-					.catch(err => {
-						console.log(err);
-						res.status(500).end();
-					})
-			},
 		}
 	},
 
 	write: {
 
 		neuron: {
+			select(req, res) {
+					neuron_model.selectNeuronByUUID(req.params.uuid)
+						.then( neuron => {
+							res.status(200).send(neuron);
+						})
+						.catch(err => {
+							console.log(err);
+							res.status(500).end();
+						});
+			},
+			unselect(req, res) {
+					neuron_model.unselectNeuronByUUID(req.params.uuid)
+						.then( neuron => {
+							res.status(200).send(neuron);
+						})
+						.catch(err => {
+							console.log(err);
+							res.status(500).end();
+						});
+			},
+			unfavorite(req, res) {
+					neuron_model.unfavoriteNeuronByUUID(req.params.uuid)
+						.then( neuron => {
+							res.status(200).send(neuron);
+						})
+						.catch(err => {
+							console.log(err);
+							res.status(500).end();
+						});
+			},
+			favorite(req, res) {
+					neuron_model.favoriteNeuronByUUID(req.params.uuid)
+						.then( neuron => {
+							res.status(200).send(neuron);
+						})
+						.catch(err => {
+							console.log(err);
+							res.status(500).end();
+						});
+			},
 			add(req, res) {
 				if (req.body.hasOwnProperty( 'document' )) {
 					neuron_model.addDocument(req.params.uuid, req.body.document)
