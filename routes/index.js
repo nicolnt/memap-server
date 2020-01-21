@@ -18,4 +18,5 @@ module.exports = function(app) {
 	require('./file')(app);
 	require('./tag')(app);
 	require('./type')(app);
+	require('./scrapping')(app);
 }
