@@ -7,7 +7,41 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
 			session.run(`
-			MATCH (neuron:Neuron {uuid: $uuid})-[r]-(:Neuron)
+			MATCH (:Neuron {uuid: $uuid})-[r]-(neuron:Neuron)
+			RETURN { 
+				relationship_type:TYPE(r),
+				from:STARTNODE(r).uuid,
+				neuronUUID:neuron.uuid 
+			} AS myNeuron
+			`,
+				{
+					"uuid": uuid 
+				})
+				.then(result => {
+
+					let data = result.records;
+					if (result.records.length >=1 ) {
+						data = data.map(neuron =>  {
+							return neuron.get('myNeuron');
+						})
+					}
+
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
+	getCloseNetworkByNeuronUUIDFull(uuid) {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
+			session.run(`
+			MATCH (:Neuron {uuid: $uuid})-[r]-(neuron:Neuron)
 
 			OPTIONAL MATCH (neuron)-[:HAS_TAG]->(tag:Tag)
 			OPTIONAL MATCH (tag)-[:HAS_ICON]->(iTag:Icon)
@@ -57,6 +91,33 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
 			session.run(`
+			MATCH (neuron:Neuron:SELECTED)
+			RETURN neuron.uuid AS uuid
+			`)
+				.then(result => {
+
+					let data = result.records;
+					if (result.records.length >=1 ) {
+						data = data.map(neuron =>  {
+							return neuron.get('uuid');
+						})
+					}
+
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
+	getAllSelectedNeuronsFull() {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
+			session.run(`
 			MATCH (n:Neuron:SELECTED)
 			OPTIONAL MATCH (neuron)-[:HAS_TAG]->(tag:Tag)
 			OPTIONAL MATCH (tag)-[:HAS_ICON]->(iTag:Icon)
@@ -102,6 +163,33 @@ module.exports = {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
 			session.run(`
 			MATCH (neuron:Neuron) WHERE NOT (neuron)--(:Neuron)
+			RETURN neuron.uuid AS uuid
+			`)
+				.then(result => {
+
+					let data = result.records;
+					if (result.records.length >=1 ) {
+						data = data.map(neuron =>  {
+							return neuron.get('uuid');
+						})
+					}
+
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
+	getAllOrphanNeuronsFull() {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
+			session.run(`
+			MATCH (neuron:Neuron) WHERE NOT (neuron)--(:Neuron)
 			OPTIONAL MATCH (neuron)-[:HAS_TAG]->(tag:Tag)
 			OPTIONAL MATCH (tag)-[:HAS_ICON]->(iTag:Icon)
 			OPTIONAL MATCH (neuron)-[:HAS_TYPE]->(type:Type)
@@ -142,6 +230,33 @@ module.exports = {
 		});
 	},
 	getAllFavoriteNeurons() {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
+			session.run(`
+			MATCH (neuron:Neuron:FAVORITE)
+			RETURN neuron.uuid AS uuid
+			`)
+				.then(result => {
+
+					let data = result.records;
+					if (result.records.length >=1 ) {
+						data = data.map(neuron =>  {
+							return neuron.get('uuid');
+						})
+					}
+
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
+	getAllFavoriteNeuronsFull() {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
 			session.run(`
