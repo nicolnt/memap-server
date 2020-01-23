@@ -12,6 +12,17 @@ apoc.initializer.cypher.1=CALL apoc.uuid.install('Neuron', {addToExistingNodes: 
 apoc.initializer.cypher.2=CALL apoc.uuid.install('Document', {addToExistingNodes: false, uuidProperty: 'uuid'})
 ```
 
+When creating a new database from scratch you must execute these CQL queries
+
+```cql
+CREATE CONSTRAINT ON (mynode:Neuron) ASSERT mynode.uuid IS UNIQUE
+CREATE CONSTRAINT ON (mynode:Document) ASSERT mynode.uuid IS UNIQUE
+CREATE CONSTRAINT ON (mynode:File) ASSERT mynode.uuid IS UNIQUE
+CREATE CONSTRAINT ON (mynode:Icon) ASSERT mynode.uuid IS UNIQUE
+```
+
+*Then restart Neo4j service!!!*
+
 ## Usage
 ```cql
 CREATE CONSTRAINT ON (mynode:MyNodeLabel) ASSERT mynode.myUUIDField IS UNIQUE
@@ -19,6 +30,7 @@ CREATE CONSTRAINT ON (mynode:MyNodeLabel) ASSERT mynode.myUUIDField IS UNIQUE
 ```cql
 CALL apoc.uuid.install('MyNodeLabel', {addToExistingNodes: true, uuidProperty: 'myUUIDField'}) yield label, installed, properties
 ```
+
 
 ## Help & sources
 

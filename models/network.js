@@ -3,29 +3,42 @@ const neoDriver = require('../db').driver;
 
 module.exports = {
 
-	getCloseNetworkByNeuronId(id) {
+	getCloseNetworkByNeuronUUID(uuid) {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
 			session.run(`
-			MATCH (center:Neuron {uuid: $uuid})-[r]-n:Neuron)
-			WITH {
-				type: TYPE(r),
-    		from: STARTNODE(r).uuid
-			} AS relationship, n
-			RETURN n, relationship
+			MATCH (neuron:Neuron {uuid: $uuid})-[r]-(:Neuron)
+
+			OPTIONAL MATCH (neuron)-[:HAS_TAG]->(tag:Tag)
+			OPTIONAL MATCH (tag)-[:HAS_ICON]->(iTag:Icon)
+			OPTIONAL MATCH (neuron)-[:HAS_TYPE]->(type:Type)
+			OPTIONAL MATCH (type)-[:HAS_ICON]->(iType:Icon)
+			OPTIONAL MATCH (neuron)-[:HAS_ICON]->(icon:Icon)
+			OPTIONAL MATCH (neuron)-[:HAS_FILE]->(file:File)
+			OPTIONAL MATCH (neuron)-[:HAS_DOCUMENT]->(document:Document)
+			RETURN { 
+				relationship_type:TYPE(r),
+				from:STARTNODE(r).uuid,
+				neuron:neuron, 
+				tags: COLLECT(DISTINCT tag.properties), 
+				type: type.properties,
+				type_icon: iType.properties,
+				icon:icon, 
+				selected: "SELECTED" IN LABELS(neuron), 
+				favorite:"FAVORITE" IN LABELS(neuron), 
+				documents: COLLECT(DISTINCT document), 
+				files: COLLECT(DISTINCT file) 
+			} AS myNeuron
 			`,
 				{
-					"uuid": id 
+					"uuid": uuid 
 				})
 				.then(result => {
 
-					let data = [];
-					if (result.records.length >= 1 ) {
-						result.records.forEach(node => {
-							data.push({
-								neuron: node.get('n').properties, // NOTE: properties because n is a Node
-								relationship: node.get('relationship') // Here relationship is already a JSON object
-							})
+					let data = result.records;
+					if (result.records.length >=1 ) {
+						data = data.map(neuron =>  {
+							return neuron.get('myNeuron');
 						})
 					}
 
