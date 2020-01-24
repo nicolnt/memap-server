@@ -180,6 +180,16 @@ module.exports = {
 			},
 			delete(req, res) {
 				if (req.body) {
+					if (req.body.hasOwnProperty( 'tag' )) {
+						neuron_model.removeSingleTag(req.params.uuid, req.body.tag)
+							.then( neuron => {
+								res.status(200).send(neuron);
+							})
+							.catch(err => {
+								console.log(err);
+								res.status(500).end();
+							});
+					}
 					if (req.body.hasOwnProperty( 'document' )) {
 						neuron_model.removeDocument(req.params.uuid, req.body.document)
 							.then( neuron => {

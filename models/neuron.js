@@ -426,6 +426,32 @@ module.exports = {
 
 		});
 	},
+	removeSingleTag(uuid, tagName) {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
+			session.run(`
+			MATCH (neuron:Neuron {uuid: $uuid})
+			MATCH (tag:Tag {name: $tagName})
+			OPTIONAL MATCH (neuron)-[r:HAS_TAG]->(tag)
+			DELETE r
+			`, {
+				uuid,
+				tagName
+			} )
+				.then(result => {
+
+					let data = result.summary.counters.updates();
+
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+		});
+	},
 	removeDocument(uuid, documentUUID) {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
