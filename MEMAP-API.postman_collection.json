@@ -1097,6 +1097,42 @@
 					"response": []
 				},
 				{
+					"name": "Edit Neuron color",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"type\":\"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Edit Neuron icon",
 					"request": {
 						"method": "PATCH",
@@ -1261,7 +1297,7 @@
 					"response": []
 				},
 				{
-					"name": "Toggle select Neuron Copy",
+					"name": "Toggle select Neuron",
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -1283,6 +1319,34 @@
 								"neuron",
 								"{{NeuronUUID}}",
 								"toggleselect"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle favorite Neuron",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}/togglefavorite",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}",
+								"togglefavorite"
 							]
 						}
 					},
@@ -2217,43 +2281,43 @@
 	],
 	"variable": [
 		{
-			"id": "5d4c245d-4ae1-452a-a88a-a5d144b2dfe2",
+			"id": "bcf32578-d0a2-4dbf-8653-022582359d32",
 			"key": "NeuronUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "57f9439b-ec22-4aa2-a4f5-f041f4b207a8",
+			"id": "1d583c15-b7d5-4187-817b-fe89faf32e65",
 			"key": "DocumentUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "cc6f1754-6477-4b49-bb80-9c1116194a0b",
+			"id": "7053fc96-cb8f-4bed-aa38-d3d7dc2becef",
 			"key": "IconUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "283ab436-a4f6-4458-a4eb-d10d93a94c0f",
+			"id": "407d9e9d-f172-4551-bfef-626abec1f1e1",
 			"key": "TypeName",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "f1c404a5-675a-4943-b8ca-ce14821bac03",
+			"id": "127d4daf-3ed4-4470-a73b-35c9d02a84fd",
 			"key": "FileUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "cf1f92fa-2b60-4ce3-b899-d2d56af085cd",
+			"id": "a15c349a-8f41-4a0e-b818-b8f16116aaa3",
 			"key": "TagName",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "3d2885fe-14ee-47e7-b7ae-8476fc131d63",
+			"id": "1c254a00-a499-43de-86d5-eea3616b61e0",
 			"key": "TagName2",
 			"value": "",
 			"type": "string"
