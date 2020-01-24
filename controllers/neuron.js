@@ -29,6 +29,26 @@ module.exports = {
 	write: {
 
 		neuron: {
+			togglefavorite(req, res) {
+					neuron_model.toggleFavoriteNeuronByUUID(req.params.uuid)
+						.then( neuron => {
+							res.status(200).send(neuron);
+						})
+						.catch(err => {
+							console.log(err);
+							res.status(500).end();
+						});
+			},
+			toggleselect(req, res) {
+					neuron_model.toggleSelectNeuronByUUID(req.params.uuid)
+						.then( neuron => {
+							res.status(200).send(neuron);
+						})
+						.catch(err => {
+							console.log(err);
+							res.status(500).end();
+						});
+			},
 			select(req, res) {
 					neuron_model.selectNeuronByUUID(req.params.uuid)
 						.then( neuron => {
@@ -104,6 +124,15 @@ module.exports = {
 
 			},
 			async edit(req, res) {
+				if (req.body.hasOwnProperty( 'color' )) {
+					await neuron_model.changeColor(req.params.uuid, req.body.color)
+						.then( neuron => {
+						})
+						.catch(err => {
+							console.log(err);
+							res.status(500).end();
+						});
+				}
 				if (req.body.hasOwnProperty( 'name' )) {
 					await neuron_model.renameByUUID(req.params.uuid, req.body.name)
 						.then( neuron => {

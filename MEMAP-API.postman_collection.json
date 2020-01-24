@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "50512bed-e39b-46f8-b7cc-5ee30c316c8a",
+		"_postman_id": "dc07dab4-0e3d-4d5b-9e93-cc7a94380d31",
 		"name": "MEMAP-API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -1261,6 +1261,34 @@
 					"response": []
 				},
 				{
+					"name": "Toggle select Neuron Copy",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}/toggleselect",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}",
+								"toggleselect"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Add Neuron to favorites",
 					"request": {
 						"method": "PUT",
@@ -2189,43 +2217,43 @@
 	],
 	"variable": [
 		{
-			"id": "02207ede-d006-4f37-8aff-35027a1d825c",
+			"id": "5d4c245d-4ae1-452a-a88a-a5d144b2dfe2",
 			"key": "NeuronUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "4778f468-8853-4d79-9308-50d9cca551a2",
+			"id": "57f9439b-ec22-4aa2-a4f5-f041f4b207a8",
 			"key": "DocumentUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "dd686733-9735-4f64-85d7-00e292d4c2b9",
+			"id": "cc6f1754-6477-4b49-bb80-9c1116194a0b",
 			"key": "IconUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "a5450793-3dbd-426c-9055-49ffcd337d9d",
+			"id": "283ab436-a4f6-4458-a4eb-d10d93a94c0f",
 			"key": "TypeName",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "db7f1684-d1c2-41be-85bf-5bb35b70eb4f",
+			"id": "f1c404a5-675a-4943-b8ca-ce14821bac03",
 			"key": "FileUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "9cfd6a4a-89c1-4492-8228-137a66668412",
+			"id": "cf1f92fa-2b60-4ce3-b899-d2d56af085cd",
 			"key": "TagName",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "12c80b5c-acd3-4bb2-9d30-bbd9a91380c4",
+			"id": "3d2885fe-14ee-47e7-b7ae-8476fc131d63",
 			"key": "TagName2",
 			"value": "",
 			"type": "string"
