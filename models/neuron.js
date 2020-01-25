@@ -45,10 +45,9 @@ module.exports = {
 			OPTIONAL MATCH (neuron)-[:HAS_FILE]->(file:File)
 			OPTIONAL MATCH (neuron)-[:HAS_DOCUMENT]->(document:Document)
 			RETURN { 
-				neuron:neuron.properties, 
-				tags: COLLECT(DISTINCT tag.properties), 
-				type: type.properties,
-				type_icon: iType.properties,
+				tags: COLLECT(DISTINCT tag), 
+				type: type,
+				type_icon: iType,
 				icon:icon, 
 				selected: "SELECTED" IN LABELS(neuron), 
 				favorite:"FAVORITE" IN LABELS(neuron), 
@@ -65,6 +64,9 @@ module.exports = {
 
 					if (result.records.length >= 1 ) {
 						data = result.records[0].get('myNeuron');
+						data.tags = data.tags.map(tag => { return tag.properties });
+						data.documents = data.documents.map(document => { return document.properties });
+						data.files = data.files.map(files => { return files.properties });
 						data.neuron = result.records[0].get('neuron').properties;
 					}
 
@@ -92,9 +94,9 @@ module.exports = {
 			OPTIONAL MATCH (neuron)-[:HAS_FILE]->(file:File)
 			OPTIONAL MATCH (neuron)-[:HAS_DOCUMENT]->(document:Document)
 			RETURN { 
-				tags: COLLECT(DISTINCT tag.properties), 
-				type: type.properties,
-				type_icon: iType.properties,
+				tags: COLLECT(DISTINCT tag), 
+				type: type,
+				type_icon: iType,
 				icon:icon, 
 				selected: "SELECTED" IN LABELS(neuron), 
 				favorite:"FAVORITE" IN LABELS(neuron), 
@@ -111,6 +113,10 @@ module.exports = {
 
 					if (result.records.length >= 1 ) {
 						data = result.records[0].get('myNeuron');
+						data.neuron = result.records[0].get('neuron').properties;
+						data.tags = data.tags.map(tag => { return tag.properties });
+						data.documents = data.documents.map(document => { return document.properties });
+						data.files = data.files.map(files => { return files.properties });
 						data.neuron = result.records[0].get('neuron').properties;
 					}
 
