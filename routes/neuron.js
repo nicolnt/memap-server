@@ -16,6 +16,8 @@ module.exports = function(app) {
 	router.put('/:uuid/unfavorite', neuron_controller.write.neuron.unfavorite);
 	router.put('/:uuid/favorite', neuron_controller.write.neuron.favorite);
 	router.put('/:uuid/select', neuron_controller.write.neuron.select);
+	router.put('/:uuid/toggleselect', neuron_controller.write.neuron.toggleselect);
+	router.put('/:uuid/togglefavorite', neuron_controller.write.neuron.togglefavorite);
 	router.put('/:uuid/unselect', neuron_controller.write.neuron.unselect);
 
 	router.delete('/:uuid', express.json(),neuron_controller.write.neuron.delete);

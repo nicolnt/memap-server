@@ -45,16 +45,15 @@ module.exports = {
 			OPTIONAL MATCH (neuron)-[:HAS_FILE]->(file:File)
 			OPTIONAL MATCH (neuron)-[:HAS_DOCUMENT]->(document:Document)
 			RETURN { 
-				neuron:neuron, 
-				tags: COLLECT(DISTINCT tag.properties), 
-				type: type.properties,
-				type_icon: iType.properties,
+				tags: COLLECT(DISTINCT tag), 
+				type: type,
+				type_icon: iType,
 				icon:icon, 
 				selected: "SELECTED" IN LABELS(neuron), 
 				favorite:"FAVORITE" IN LABELS(neuron), 
 				documents: COLLECT(DISTINCT document), 
 				files: COLLECT(DISTINCT file) 
-			} AS myNeuron
+			} AS myNeuron, neuron
 			`,
 				{
 					id
@@ -63,7 +62,13 @@ module.exports = {
 
 					let data = {};
 
-					if (result.records.length >= 1 ) data = result.records[0].get('myNeuron');
+					if (result.records.length >= 1 ) {
+						data = result.records[0].get('myNeuron');
+						data.tags = data.tags.map(tag => { return tag.properties });
+						data.documents = data.documents.map(document => { return document.properties });
+						data.files = data.files.map(files => { return files.properties });
+						data.neuron = result.records[0].get('neuron').properties;
+					}
 
 					resolve( data );
 				})
@@ -89,16 +94,15 @@ module.exports = {
 			OPTIONAL MATCH (neuron)-[:HAS_FILE]->(file:File)
 			OPTIONAL MATCH (neuron)-[:HAS_DOCUMENT]->(document:Document)
 			RETURN { 
-				neuron:neuron, 
-				tags: COLLECT(DISTINCT tag.properties), 
-				type: type.properties,
-				type_icon: iType.properties,
+				tags: COLLECT(DISTINCT tag), 
+				type: type,
+				type_icon: iType,
 				icon:icon, 
 				selected: "SELECTED" IN LABELS(neuron), 
 				favorite:"FAVORITE" IN LABELS(neuron), 
 				documents: COLLECT(DISTINCT document), 
 				files: COLLECT(DISTINCT file) 
-			} AS myNeuron
+			} AS myNeuron, neuron
 			`,
 				{
 					uuid
@@ -107,7 +111,14 @@ module.exports = {
 
 					let data = {};
 
-					if (result.records.length >= 1 ) data = result.records[0].get('myNeuron');
+					if (result.records.length >= 1 ) {
+						data = result.records[0].get('myNeuron');
+						data.neuron = result.records[0].get('neuron').properties;
+						data.tags = data.tags.map(tag => { return tag.properties });
+						data.documents = data.documents.map(document => { return document.properties });
+						data.files = data.files.map(files => { return files.properties });
+						data.neuron = result.records[0].get('neuron').properties;
+					}
 
 					resolve( data );
 				})
@@ -225,6 +236,56 @@ module.exports = {
 
 		});
 	},
+	toggleFavoriteNeuronByUUID(uuid) {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
+			session.run(`
+			MATCH (n:Neuron {uuid: $uuid})
+			CALL apoc.do.when("FAVORITE" IN LABELS(n), "REMOVE n:FAVORITE", "SET n:FAVORITE", {n:n}) YIELD value RETURN value
+			`,
+				{
+					uuid
+				})
+				.then(result => {
+
+					let data = result.summary.counters.updates();
+
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
+	toggleSelectNeuronByUUID(uuid) {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
+			session.run(`
+			MATCH (n:Neuron {uuid: $uuid})
+			CALL apoc.do.when("SELECTED" IN LABELS(n), "REMOVE n:SELECTED", "SET n:SELECTED", {n:n}) YIELD value RETURN value
+			`,
+				{
+					uuid
+				})
+				.then(result => {
+
+					let data = result.summary.counters.updates();
+
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
 	selectNeuronByUUID(uuid) {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
@@ -268,6 +329,32 @@ module.exports = {
 					let data = {};
 					if (result.records.length >= 1 ) data = result.records[0].get('neuron').properties;
 
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
+	changeColor(uuid, newColor) {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
+			session.run(`
+			MATCH (neuron:Neuron {uuid: $uuid})
+			SET neuron.color = $newColor
+			RETURN neuron
+			`, {
+				uuid,
+				newColor
+			} )
+				.then(result => {
+
+					let data = {};
+					if (result.records.length >= 1 ) data = result.records[0].get('neuron').properties;
 					resolve( data );
 				})
 				.catch(error => {
@@ -343,6 +430,32 @@ module.exports = {
 					session.close();
 				});
 
+		});
+	},
+	removeSingleTag(uuid, tagName) {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
+			session.run(`
+			MATCH (neuron:Neuron {uuid: $uuid})
+			MATCH (tag:Tag {name: $tagName})
+			OPTIONAL MATCH (neuron)-[r:HAS_TAG]->(tag)
+			DELETE r
+			`, {
+				uuid,
+				tagName
+			} )
+				.then(result => {
+
+					let data = result.summary.counters.updates();
+
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
 		});
 	},
 	removeDocument(uuid, documentUUID) {

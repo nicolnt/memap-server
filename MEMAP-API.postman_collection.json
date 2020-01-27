@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "50512bed-e39b-46f8-b7cc-5ee30c316c8a",
+		"_postman_id": "dc07dab4-0e3d-4d5b-9e93-cc7a94380d31",
 		"name": "MEMAP-API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -42,7 +42,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\":\"tagB\"\n}",
+							"raw": "{\n\t\"name\":\"tag C\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -966,7 +966,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"tags\": [\n\t\t{\"name\":\"{{TagName}}\"},\n\t\t{\"name\":\"{{TagName2}}\"}\n\t]\n}",
+							"raw": "{\n\t\"tags\": [\n\t\t{\"name\":\"tag A\"},\n\t\t{\"name\":\"tag B\"},\n\t\t{\"name\":\"tag C\"}\n\t]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1075,6 +1075,42 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n\t\"type\":\"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Neuron color",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"color\":\"3e3e3e\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1255,6 +1291,62 @@
 								"neuron",
 								"{{NeuronUUID}}",
 								"unselect"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle select Neuron",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}/toggleselect",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}",
+								"toggleselect"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle favorite Neuron",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}/togglefavorite",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}",
+								"togglefavorite"
 							]
 						}
 					},
@@ -1450,6 +1542,42 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n \"document\":\"{{DocumentUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove a tag from Neuron",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"tag\":\"tag A\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2004,165 +2132,171 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Get Document by ID",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/document/cde6c834-405a-4a17-a568-bd774912fda0",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"document",
-						"cde6c834-405a-4a17-a568-bd774912fda0"
-					]
+			"name": "Document",
+			"item": [
+				{
+					"name": "Get Document by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/document/cde6c834-405a-4a17-a568-bd774912fda0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"document",
+								"cde6c834-405a-4a17-a568-bd774912fda0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Document",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "test_TOKEN123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"newdoc\",\n\t\"content\":\"test de contenu\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/document/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"document",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Document",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "test_TOKEN123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"uuid\":\"25f54ef5-9220-4eec-8991-e61d18dc0471\",\n\t\"title\":\"newdoc\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/document/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"document",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Document Copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "test_TOKEN123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/document/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"document",
+								"all"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create Document",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "test_TOKEN123",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"title\":\"newdoc\",\n\t\"content\":\"test de contenu\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/document/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"document",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Edit Document",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "test_TOKEN123",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"uuid\":\"25f54ef5-9220-4eec-8991-e61d18dc0471\",\n\t\"title\":\"newdoc\"\n\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/document/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"document",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Edit Document Copy",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "test_TOKEN123",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/document/all",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"document",
-						"all"
-					]
-				}
-			},
-			"response": []
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"event": [
@@ -2189,43 +2323,43 @@
 	],
 	"variable": [
 		{
-			"id": "02207ede-d006-4f37-8aff-35027a1d825c",
+			"id": "96d9d419-37d8-4eda-ac61-845357652d12",
 			"key": "NeuronUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "4778f468-8853-4d79-9308-50d9cca551a2",
+			"id": "8bf12a3c-ef03-453b-a63f-23abeabe73f5",
 			"key": "DocumentUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "dd686733-9735-4f64-85d7-00e292d4c2b9",
+			"id": "cb5c03de-f2d6-4790-b91c-e06552a567f6",
 			"key": "IconUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "a5450793-3dbd-426c-9055-49ffcd337d9d",
+			"id": "530329f3-fdba-4948-834c-64256b4abef1",
 			"key": "TypeName",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "db7f1684-d1c2-41be-85bf-5bb35b70eb4f",
+			"id": "377b9e58-53d9-428a-a63c-277a796464eb",
 			"key": "FileUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "9cfd6a4a-89c1-4492-8228-137a66668412",
+			"id": "33d46f77-51da-4175-96c8-b591d68eb041",
 			"key": "TagName",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "12c80b5c-acd3-4bb2-9d30-bbd9a91380c4",
+			"id": "ff584ef3-e39f-478a-9df6-38a4230eef2a",
 			"key": "TagName2",
 			"value": "",
 			"type": "string"

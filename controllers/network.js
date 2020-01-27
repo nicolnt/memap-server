@@ -8,14 +8,10 @@ module.exports = {
 				network_model.getCloseNetworkByNeuronUUID(req.params.uuid)
 					.then(data => {
 
-						const json = {
-								network: data
-						}
-
 						if (data) res.status(200);
  						else res.send(404);
 
-						res.send(json);
+						res.send(data);
 					})
 					.catch(err => {
 						if (err) res.status(500);
