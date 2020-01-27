@@ -8,5 +8,6 @@ module.exports = function(app) {
 
 	router.put('/', express.json(), reference_controller.write.editRef);
 	router.post('/', express.json(), reference_controller.write.getExternRef);
+	router.post('/intern', express.json(), reference_controller.write.getInternRef);
 
 };

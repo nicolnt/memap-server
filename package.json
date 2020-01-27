@@ -16,6 +16,7 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.1.6",
     "neo4j-driver": "^4.0.1",
+    "node-html-parser": "^1.1.18",
     "puppeteer": "^2.0.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
