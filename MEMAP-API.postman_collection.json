@@ -884,7 +884,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\":\"euh what??\"\n}",
+							"raw": "{\n\t\"name\":\"Tout nouveau neuron V3\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1133,7 +1133,7 @@
 					"response": []
 				},
 				{
-					"name": "Edit Neuron icon",
+					"name": "Edit Neuron icon with UUID",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -1146,7 +1146,43 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"icon\":\"{{IconUUID}}\"\n}",
+							"raw": "{\n\t\"icon_uuid\":\"{{IconUUID}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/neuron/{{NeuronUUID}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"neuron",
+								"{{NeuronUUID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Neuron icon with name",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"icon_name\":\"angry\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1642,13 +1678,13 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "myFirstFileUpload",
+									"value": "Test",
 									"type": "text"
 								},
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/home/nicolas/Downloads/Minecraft-Editor-Rapport.pdf"
+									"src": "/home/nicolas/Downloads/emoji_u1f600.png"
 								}
 							],
 							"options": {
@@ -1808,13 +1844,13 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "icooone",
+									"value": "poce blo",
 									"type": "text"
 								},
 								{
 									"key": "icon",
 									"type": "file",
-									"src": "/home/nicolas/Downloads/git_cheat_sheet.png"
+									"src": []
 								}
 							],
 							"options": {
@@ -1851,7 +1887,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/icon/{{IconUUID}}",
+							"raw": "http://localhost:3000/icon/acbbdda5-6e4a-41cd-8fc7-cc061382fd49",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1859,7 +1895,7 @@
 							"port": "3000",
 							"path": [
 								"icon",
-								"{{IconUUID}}"
+								"acbbdda5-6e4a-41cd-8fc7-cc061382fd49"
 							]
 						}
 					},
@@ -2155,6 +2191,27 @@
 					"response": []
 				},
 				{
+					"name": "Get Neurons connected to Document by UUID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/document/{{DocumentUUID}}/neurons",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"document",
+								"{{DocumentUUID}}",
+								"neurons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create Document",
 					"request": {
 						"auth": {
@@ -2178,7 +2235,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"title\":\"newdoc\",\n\t\"content\":\"test de contenu\"\n}",
+							"raw": "{\n\t\"title\":\"newdoc 2\",\n\t\"content\":\"test de contenu 2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2297,6 +2354,32 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "History",
+			"item": [
+				{
+					"name": "last 5 visited neurons",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/history/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"history",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"event": [
@@ -2323,43 +2406,43 @@
 	],
 	"variable": [
 		{
-			"id": "96d9d419-37d8-4eda-ac61-845357652d12",
+			"id": "9d4e8eed-2432-4c56-8660-ca4959516768",
 			"key": "NeuronUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "8bf12a3c-ef03-453b-a63f-23abeabe73f5",
+			"id": "0102011e-b847-46af-af04-8057c442a40a",
 			"key": "DocumentUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "cb5c03de-f2d6-4790-b91c-e06552a567f6",
+			"id": "53929f09-dd8f-4959-9e6c-1cadeef6bc5b",
 			"key": "IconUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "530329f3-fdba-4948-834c-64256b4abef1",
+			"id": "809c6864-e110-470b-8299-935f3b3eed43",
 			"key": "TypeName",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "377b9e58-53d9-428a-a63c-277a796464eb",
+			"id": "2f24606e-d9ee-474a-9d56-a29d5a6f47ea",
 			"key": "FileUUID",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "33d46f77-51da-4175-96c8-b591d68eb041",
+			"id": "74c5ac81-b0af-4781-a2b6-91942925cb66",
 			"key": "TagName",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "ff584ef3-e39f-478a-9df6-38a4230eef2a",
+			"id": "d9e7de6b-9f85-4ad3-91a4-fc5ec05b16c4",
 			"key": "TagName2",
 			"value": "",
 			"type": "string"
