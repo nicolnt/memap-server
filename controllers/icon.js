@@ -26,34 +26,37 @@ module.exports = {
 
 	write: {
 
-		newIcon(req, res) {
+		async newIcon(req, res) {
+
+			// TODO accept no file
 			const icon_uuid = uuid.v4();
-			const file = req.files.icon.name.match(/([^\.]+)\.(?<ext>.+)/).groups;
-			const newIconFilename = icon_uuid + '.' + file.ext;
-			const newPathToIcon = path.join(__dirname, '../public/icons', newIconFilename);
+			const newIcon = {
+				name: req.body.name,
+				uuid: icon_uuid
+			};
 
-			if (req.body.name) file.name = req.body.name;
+			if ( req.files ) {
+				const file = req.files.icon.name.match(/([^\.]+)\.(?<ext>.+)/).groups;
+				const newIconFilename = icon_uuid + '.' + file.ext;
+				const newPathToIcon = path.join(__dirname, '../public/icons', newIconFilename);
 
-			req.files.icon.mv(newPathToIcon, err => {
-    		if(err) {
-					res.status(500).end();
-				}
-				else {
-					const newIcon = {
-						name: file.name,
-						uuid: icon_uuid,
-						extension: file.ext
-					};
+				//if (req.body.name) file.name = req.body.name;
+				newIcon.extension = file.ext;
 
-					icon_model.createIcon(newIcon)
-						.then( icon => {
-							res.status(200).send( icon );
-						})
-						.catch(err => {
-							if (err) res.status(500).end();
-						});
-				}
-			});
+				await req.files.icon.mv(newPathToIcon, err => {
+    			if(err) res.status(500).end();
+				});
+
+			}
+
+			icon_model.createIcon(newIcon)
+				.then( icon => {
+					res.status(200).send( icon );
+				})
+				.catch(err => {
+					if (err) res.status(500).end();
+				});
+
 		},
 		rename(req, res) {
 

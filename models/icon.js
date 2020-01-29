@@ -3,6 +3,31 @@ const neoDriver = require('../db').driver;
 
 module.exports = {
 
+	getIconByName(name) {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
+			session.run(`
+			MATCH (i:Icon {name: $name})
+			RETURN i AS icon
+			`,
+				{
+					name
+				})
+				.then(result => {
+
+					let data = {};
+					if (result.records.length >= 1 ) data = result.records[0].get('icon').properties;
+
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+		});
+	},
 	getIconByUUID(uuid) {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
