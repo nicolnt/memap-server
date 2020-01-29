@@ -3,6 +3,33 @@ const neoDriver = require('../db').driver;
 
 module.exports = {
 
+	getNeuronsConnectedToDocumentByUUID(uuidDocument) {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
+			session.run(`
+			MATCH (:Document {uuid: $uuidDocument})--(n:Neuron)
+			RETURN n.uuid AS neuron_uuid
+			`,
+				{
+					uuidDocument
+				})
+				.then(result => { // INFO: You must put RETURN n.label AS label -> get('label'), otherwise if RETURN n.label -> get('n.label')
+					var data = [];
+
+					result.records.forEach(element => {
+						data.push(element.get('neuron_uuid'));
+					});
+					resolve(data);
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
 	getDocumentsList() {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });

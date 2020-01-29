@@ -2,6 +2,18 @@ const document_model = require('../models/document');
 
 module.exports = {
 	read: {
+		neuronsConnectedToDocument(req, res) {
+			document_model.getNeuronsConnectedToDocumentByUUID(req.params.uuidDoc)
+					.then(data => {
+						if (data) res.status(200);
+ 						else res.send(404);
+						res.send(data);
+					})
+					.catch(err => {
+						if (err) res.status(500).send(err);
+						res.end();
+					});
+		},
 		listDocument(req, res) {
 			document_model.getDocumentsList()
 					.then(data => {
