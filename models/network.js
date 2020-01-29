@@ -7,7 +7,8 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
 			session.run(`
-			MATCH (:Neuron {uuid: $uuid})-[r]-(neuron:Neuron)
+			MATCH (n:Neuron {uuid: $uuid})-[r]-(neuron:Neuron)
+			SET n.dateConsulted = TIMESTAMP()
 			RETURN { 
 				relationship_type:TYPE(r),
 				from:STARTNODE(r).uuid,
@@ -329,10 +330,10 @@ module.exports = {
 			MATCH (to:Neuron {uuid: $rel.uuidTo})
 			WITH from, to
 			FOREACH( t IN CASE WHEN $rel.type = "parent" THEN [1] ELSE [] END | 
-					CREATE (from)-[r:IS_PARENT]->(to) )
+					MERGE (from)-[r:IS_PARENT]->(to) )
 			WITH from, to
 			FOREACH( t IN CASE WHEN $rel.type = "friend" THEN [1] ELSE [] END | 
-					CREATE (from)-[r:IS_FRIEND]->(to) )
+					MERGE (from)-[r:IS_FRIEND]->(to) )
 			RETURN from, to
 			`,
 				{

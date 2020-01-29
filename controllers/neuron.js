@@ -151,8 +151,17 @@ module.exports = {
 							res.status(500).end();
 						});
 				}
-				if (req.body.hasOwnProperty( 'icon' )) {
-					await neuron_model.changeIcon(req.params.uuid, req.body.icon)
+				if (req.body.hasOwnProperty( 'icon_name' )) {
+					await neuron_model.changeIconByFAname(req.params.uuid, req.body.icon_name)
+						.then( neuron => {
+						})
+						.catch(err => {
+							console.log(err);
+							res.status(500).end();
+						});
+				}
+				if (req.body.hasOwnProperty( 'icon_uuid' )) {
+					await neuron_model.changeIconByUUID(req.params.uuid, req.body.icon_uuid)
 						.then( neuron => {
 						})
 						.catch(err => {

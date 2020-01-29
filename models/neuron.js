@@ -93,16 +93,13 @@ module.exports = {
 			OPTIONAL MATCH (neuron)-[:HAS_ICON]->(icon:Icon)
 			OPTIONAL MATCH (neuron)-[:HAS_FILE]->(file:File)
 			OPTIONAL MATCH (neuron)-[:HAS_DOCUMENT]->(document:Document)
-			RETURN { 
-				tags: COLLECT(DISTINCT tag), 
-				type: type,
-				type_icon: iType,
-				icon:icon, 
-				selected: "SELECTED" IN LABELS(neuron), 
-				favorite:"FAVORITE" IN LABELS(neuron), 
-				documents: COLLECT(DISTINCT document), 
-				files: COLLECT(DISTINCT file) 
-			} AS myNeuron, neuron
+
+			RETURN neuron, type, icon, iType AS type_icon,
+			COLLECT(DISTINCT tag) AS tags,
+			"SELECTED" IN LABELS(neuron) AS selected,
+			"FAVORITE" IN LABELS(neuron) AS favorite,
+			COLLECT(DISTINCT document) AS documents,
+			COLLECT(DISTINCT file) AS files
 			`,
 				{
 					uuid
@@ -112,12 +109,22 @@ module.exports = {
 					let data = {};
 
 					if (result.records.length >= 1 ) {
-						data = result.records[0].get('myNeuron');
 						data.neuron = result.records[0].get('neuron').properties;
-						data.tags = data.tags.map(tag => { return tag.properties });
-						data.documents = data.documents.map(document => { return document.properties });
-						data.files = data.files.map(files => { return files.properties });
-						data.neuron = result.records[0].get('neuron').properties;
+						data.tags = result.records[0].get('tags').map(tag => { return tag.properties });
+						data.documents = result.records[0].get('documents').map(doc => { return doc.properties });
+						data.files = result.records[0].get('files').map(file => { return file.properties });
+						data.documents = result.records[0].get('documents').map(doc => { return doc.properties });
+						data.favorite = result.records[0].get('favorite');
+						data.selected = result.records[0].get('selected');
+
+						const icon = result.records[0].get('icon'); 
+						if (icon) data.icon = icon.properties;
+						const type = result.records[0].get('type'); 
+						if (type) {
+							data.type = type.properties;
+							const type_icon = result.records[0].get('type_icon');
+							if (type_icon) data.type.icon = type_icon.properties;
+						}
 					}
 
 					resolve( data );
@@ -162,9 +169,10 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
 			session.run(`
-		MATCH (n:Neuron:FAVORITE {uuid: $uuid})
-		REMOVE n:FAVORITE
-		RETURN n AS neuron
+			MATCH (n:Neuron:FAVORITE {uuid: $uuid})
+			SET n.dateEdited = TIMESTAMP()
+			REMOVE n:FAVORITE
+			RETURN n AS neuron
 			`,
 				{
 					uuid
@@ -189,6 +197,7 @@ module.exports = {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
 			session.run(`
 			MATCH (n:Neuron {uuid: $uuid})
+			SET n.dateEdited = TIMESTAMP()
 			SET n:FAVORITE
 			RETURN n AS neuron
 			`,
@@ -214,9 +223,10 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
 			session.run(`
-		MATCH (n:Neuron:SELECTED {uuid: $uuid})
-		REMOVE n:SELECTED
-		RETURN n AS neuron
+			MATCH (n:Neuron:SELECTED {uuid: $uuid})
+			SET n.dateEdited = TIMESTAMP()
+			REMOVE n:SELECTED
+			RETURN n AS neuron
 			`,
 				{
 					uuid
@@ -241,6 +251,8 @@ module.exports = {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
 			session.run(`
 			MATCH (n:Neuron {uuid: $uuid})
+			SET n.dateEdited = TIMESTAMP()
+			WITH n
 			CALL apoc.do.when("FAVORITE" IN LABELS(n), "REMOVE n:FAVORITE", "SET n:FAVORITE", {n:n}) YIELD value RETURN value
 			`,
 				{
@@ -266,6 +278,8 @@ module.exports = {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
 			session.run(`
 			MATCH (n:Neuron {uuid: $uuid})
+			SET n.dateEdited = TIMESTAMP()
+			WITH n
 			CALL apoc.do.when("SELECTED" IN LABELS(n), "REMOVE n:SELECTED", "SET n:SELECTED", {n:n}) YIELD value RETURN value
 			`,
 				{
@@ -290,9 +304,10 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
 			session.run(`
-		MATCH (n:Neuron {uuid: $uuid})
-		SET n:SELECTED
-		RETURN n AS neuron
+			MATCH (n:Neuron {uuid: $uuid})
+			SET n:SELECTED
+			SET n.dateEdited = TIMESTAMP()
+			RETURN n AS neuron
 			`,
 				{
 					uuid
@@ -316,9 +331,10 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
 			session.run(`
-		MATCH (n:Neuron {uuid: $uuid})
-		SET n.name = $name
-		RETURN n AS neuron
+			MATCH (n:Neuron {uuid: $uuid})
+			SET n.name = $name
+			SET n.dateEdited = TIMESTAMP()
+			RETURN n AS neuron
 			`,
 				{
 					uuid,
@@ -344,9 +360,10 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
 			session.run(`
-			MATCH (neuron:Neuron {uuid: $uuid})
-			SET neuron.color = $newColor
-			RETURN neuron
+			MATCH (n:Neuron {uuid: $uuid})
+			SET n.color = $newColor
+			SET n.dateEdited = TIMESTAMP()
+			RETURN n AS neuron
 			`, {
 				uuid,
 				newColor
@@ -366,7 +383,37 @@ module.exports = {
 
 		});
 	},
-	changeIcon(uuid, iconUUID) {
+	changeIconByFAname(uuid, fontAwesomeIcon) {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
+			session.run(`
+			MATCH (neuron:Neuron {uuid: $uuid})
+			OPTIONAL MATCH (neuron)-[r:HAS_ICON]->(i:Icon)
+			DELETE r
+			WITH neuron
+			SET neuron.dateEdited = TIMESTAMP(),
+			neuron.iconFontAwesome = $fontAwesomeIcon
+			RETURN neuron
+			`, {
+				uuid,
+				fontAwesomeIcon
+			} )
+				.then(result => {
+
+					let data = {};
+					if (result.records.length >= 1 ) data = result.records[0].get('neuron').properties.iconFontAwesome;
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
+	changeIconByUUID(uuid, iconUUID) {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
 			session.run(`
@@ -378,7 +425,8 @@ module.exports = {
 
 			MATCH (icon:Icon {uuid: $iconUUID})
 			CREATE (neuron)-[r:HAS_ICON]->(icon)
-
+			SET neuron.dateEdited = TIMESTAMP()
+			REMOVE neuron.iconFontAwesome
 			RETURN icon
 			`, {
 				uuid,
@@ -411,6 +459,7 @@ module.exports = {
 
 			MATCH (type:Type {name: $typeName})
 			CREATE (neuron)-[r:HAS_TYPE]->(type)
+			SET neuron.dateEdited = TIMESTAMP()
 
 			RETURN type
 			`, {
@@ -439,6 +488,7 @@ module.exports = {
 			MATCH (neuron:Neuron {uuid: $uuid})
 			MATCH (tag:Tag {name: $tagName})
 			OPTIONAL MATCH (neuron)-[r:HAS_TAG]->(tag)
+			SET neuron.dateEdited = TIMESTAMP()
 			DELETE r
 			`, {
 				uuid,
@@ -466,6 +516,7 @@ module.exports = {
 			MATCH (d:Document {uuid: $documentUUID})
 			OPTIONAL MATCH (neuron)-[r:HAS_DOCUMENT]->(d)
 			DELETE r
+			SET neuron.dateEdited = TIMESTAMP()
 			RETURN neuron, d AS document
 			`, {
 				uuid,
@@ -493,6 +544,7 @@ module.exports = {
 			MATCH (file:File {uuid: $fileUUID})
 			OPTIONAL MATCH (neuron)-[r:HAS_FILE]->(file)
 			DELETE r
+			SET neuron.dateEdited = TIMESTAMP()
 			RETURN neuron, file
 			`, {
 				uuid,
@@ -525,6 +577,7 @@ module.exports = {
 			MATCH (neuron:Neuron {uuid: $uuid})
 			MATCH (d:Document {uuid: $documentUUID})
 			MERGE (neuron)-[r:HAS_DOCUMENT]->(d)
+			SET neuron.dateEdited = TIMESTAMP()
 			RETURN neuron, d AS document
 			`, {
 				uuid,
@@ -556,6 +609,7 @@ module.exports = {
 			MATCH (neuron:Neuron {uuid: $uuid})
 			MATCH (file:File {uuid: $fileUUID})
 			MERGE (neuron)-[r:HAS_FILE]->(file)
+			SET neuron.dateEdited = TIMESTAMP()
 			RETURN neuron, file
 			`, {
 				uuid,
@@ -593,6 +647,7 @@ module.exports = {
 			UNWIND $tags AS t
 			MATCH (tag:Tag {name: t.name})
 			CREATE (neuron)-[r:HAS_TAG]->(tag)
+			SET neuron.dateEdited = TIMESTAMP()
 
 			RETURN tag
 			`, {
@@ -638,7 +693,7 @@ module.exports = {
 					let id;
 					if (result.records.length >= 1 ) id = result.records[0].get('id');
 
-					this.getNeuronByID(id).then( data => {
+					this.getNeuronUUIDByID(id).then( data => {
 						resolve( data );
 					}).catch(err => {
 						reject(err);
