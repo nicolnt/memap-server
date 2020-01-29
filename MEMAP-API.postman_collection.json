@@ -1,10 +1,197 @@
 {
 	"info": {
-		"_postman_id": "dc07dab4-0e3d-4d5b-9e93-cc7a94380d31",
+		"_postman_id": "5acadec8-c8eb-4107-8999-ad9e84eb470c",
 		"name": "MEMAP-API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "Reference",
+			"item": [
+				{
+					"name": "Check Reference Extern",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "test_TOKEN123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"uuidPage\":\"uiiyityutuy\",\n\t\"url\":\"https://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Accueil_de_la_communaut%C3%A9\",\n\t\"idRef\":\"catlinks\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/reference",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reference"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Reference",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "test_TOKEN123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"uuidPage\":\"2\",\n\t\"url\":\"https://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Accueil_de_la_communaut%C3%A9\",\n\t\"idRef\":\"catlinks\",\n\t\"content\":\"<div id=\\\"mw-normal-catlinks\\\" class=\\\"mw-normal-catlinks\\\"><a href=\\\"/wiki/Cat%C3%A9gorie:Accueil\\\" title=\\\"Cat&#xE9;gorie:Accueil\\\">Cat&#xE9;gorie</a>&#xA0;: <ul><li><a href=\\\"/wiki/Cat%C3%A9gorie:Communaut%C3%A9_Wikip%C3%A9dia\\\" title=\\\"Cat&#xE9;gorie:Communaut&#xE9; Wikip&#xE9;dia\\\">Communaut&#xE9; Wikip&#xE9;dia</a></li></ul></div>\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/reference",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reference"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Reference Intern",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "test_TOKEN123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"uuidPage\":\"uiiyityutuy\",\n\t\"url\":\"https://fr.wikipedia.org/wiki/Wikip%C3%A9dia:Accueil_de_la_communaut%C3%A9\",\n\t\"idRef\":\"catlinks\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/reference",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reference"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recup page Extern",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "test_TOKEN123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"uuidPage\":\"uiiyityutuy\",\n\t\"url\":\"https://openclassrooms.com/fr/courses/3013816-initiez-vous-au-marketing-digital\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/reference/page",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"reference",
+								"page"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
 		{
 			"name": "Tag",
 			"item": [
@@ -2304,7 +2491,53 @@
 					"response": []
 				},
 				{
-					"name": "Edit Document Copy",
+					"name": "Delete Document",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "test_TOKEN123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"uuid\":\"aebd5efa-b1f0-4432-8173-5d578123ffad\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/document/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"document",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Document",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},

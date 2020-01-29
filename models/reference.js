@@ -64,7 +64,7 @@ module.exports = {
             const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
 			session.run(`
 			MATCH (r:Reference) WHERE r.uuidPage = $uuidPage AND r.url = $url AND r.idRef = $idRef
-            SET r += $content
+            SET r.content = $content
             RETURN r
 			`,
 				{
