@@ -9,7 +9,6 @@ module.exports = {
         getExternRef(req, res) {
             rp(req.body.url)
             .then((html) => {
-                console.log(html)
                 reference_model.getReference(req.body).then((data) => {
                     let content = $('#' + req.body.idRef, html).html();
 
@@ -41,6 +40,35 @@ module.exports = {
                 }
             });
         }, 
+        getPage(req, res) {
+            rp(req.body.url)
+            .then((html) => {
+                let content = $.load(html)
+                content('*').each(function() {
+                    if($(this).attr('id') == undefined) {
+                        $(this).addClass("no-referencing");
+                    } else {
+                        $(this).addClass("referencing");
+                    }
+                })
+
+                console.log(content)
+                res.status(200);
+                res.send({'state' : 'good', 'message' : '', 'content' : content('body').html(), 'updated' : false});
+            })
+            .catch(function(response){
+                if(response.error.code == 'ENOTFOUND') {
+                    res.status(200);
+                    res.send({'state' : 'noUrl', 'message' : 'L\'url de la référence specifié n\'ai pas correct.', 'content' : '', 'updated' : false});
+                } else {
+                    res.status(500);
+                    res.end();
+                }
+            });
+        }, 
+
+
+
         getInternRef(req, res) {
             document_model.getDocumentById(req.body.idPageRef).then((data) => { 
                 reference_model.getReference(req.body).then((ref) => {
@@ -75,7 +103,18 @@ module.exports = {
                 res.status(500);
                 res.end();
             });
-        }
+        },
+        deleteRef(req, res) {
+            reference_model.deleteReference(req.body).then((data) => {
+                res.status(200);
+                res.send("deleted");
+            })
+        .catch(function(err){
+            console.log(err)
+            res.status(500);
+            res.end();
+        });
+    }
     }
 }
 
