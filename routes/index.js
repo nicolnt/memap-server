@@ -19,4 +19,5 @@ module.exports = function(app) {
 	require('./tag')(app);
 	require('./type')(app);
 	require('./reference')(app);
+	require('./history')(app);
 }
