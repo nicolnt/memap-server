@@ -67,13 +67,10 @@ module.exports = {
             });
         }, 
 
-
-
         getInternRef(req, res) {
             document_model.getDocumentById(req.body.idPageRef).then((data) => { 
                 reference_model.getReference(req.body).then((ref) => {
                     let content = $('#' + req.body.idRef, data.content).html();
-                    console.log(content);
                     if(ref.length == 0) {
                         if(content != null) {
                             reference_model.createReference(req.body, content);
