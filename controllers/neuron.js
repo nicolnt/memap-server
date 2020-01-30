@@ -188,7 +188,7 @@ module.exports = {
 						});
 			},
 			delete(req, res) {
-				if (req.body) {
+				if (Object.keys(req.body).length) {
 					if (req.body.hasOwnProperty( 'tag' )) {
 						neuron_model.removeSingleTag(req.params.uuid, req.body.tag)
 							.then( neuron => {
@@ -223,7 +223,7 @@ module.exports = {
 				else {
 					neuron_model.deleteByUUID(req.params.uuid)
 						.then( message => {
-							res.status(200).end(message);
+							res.status(200).send(message);
 						})
 						.catch(err => {
 							console.log(err);
