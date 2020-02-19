@@ -20,4 +20,5 @@ module.exports = function(app) {
 	require('./type')(app);
 	require('./reference')(app);
 	require('./history')(app);
+	require('./user')(app);
 }

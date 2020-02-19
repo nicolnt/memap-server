@@ -10,6 +10,7 @@ apoc.uuid.enabled=true
 # Database init scripts
 apoc.initializer.cypher.1=CALL apoc.uuid.install('Neuron', {addToExistingNodes: false, uuidProperty: 'uuid'})
 apoc.initializer.cypher.2=CALL apoc.uuid.install('Document', {addToExistingNodes: false, uuidProperty: 'uuid'})
+apoc.initializer.cypher.3=CALL apoc.uuid.install('User', {addToExistingNodes: false, uuidProperty: 'uuid'})
 ```
 
 When creating a new database from scratch you must execute these CQL queries
@@ -19,7 +20,12 @@ CREATE CONSTRAINT ON (mynode:Neuron) ASSERT mynode.uuid IS UNIQUE
 CREATE CONSTRAINT ON (mynode:Document) ASSERT mynode.uuid IS UNIQUE
 CREATE CONSTRAINT ON (mynode:File) ASSERT mynode.uuid IS UNIQUE
 CREATE CONSTRAINT ON (mynode:Icon) ASSERT mynode.uuid IS UNIQUE
+CREATE CONSTRAINT ON (mynode:User) ASSERT mynode.uuid IS UNIQUE
 ```
+# Database init scripts
+apoc.initializer.cypher.1=CALL apoc.uuid.install('Neuron', {addToExistingNodes: false, uuidProperty: 'uuid'})
+apoc.initializer.cypher.2=CALL apoc.uuid.install('Document', {addToExistingNodes: false, uuidProperty: 'uuid'})
+apoc.initializer.cypher.3=CALL apoc.uuid.install('User', {addToExistingNodes: false, uuidProperty: 'uuid'})
 
 *Then restart Neo4j service!!!*
 
