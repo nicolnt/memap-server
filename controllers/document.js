@@ -1,7 +1,7 @@
 const document_model = require('../models/document');
+const Document = require('./CRUD/Document.js');
 
 module.exports = {
-	read: {
 		neuronsConnectedToDocument(req, res) {
 			document_model.getNeuronsConnectedToDocumentByUUID(req.params.uuidDoc)
 					.then(data => {
@@ -14,93 +14,41 @@ module.exports = {
 						res.end();
 					});
 		},
-		listDocument(req, res) {
-			document_model.getDocumentsList()
-					.then(data => {
 
-						const json = {
-								documents: data
-						}
+		async getAll(req, res) {
+			var documentList = await Document.$getAll();
+			var json = {documents:[]};
+			documentList.forEach(element => {
+				json['documents'].push(element.json);
+			});
 
-						if (data) res.status(200);
- 						else res.send(404);
-
-						res.send(json);
-					})
-					.catch(err => {
-						if (err) res.status(500).send(err);
-						res.end();
-					});
+			res.status(200);
+			res.send(json);
 		},
 
-		entireDocument: {
-			byIdDocument(req, res) {
-
-				document_model.getDocumentById(req.params.id)
-					.then(data => {
-
-						const json = {
-								document: data
-						}
-
-						if (data) res.status(200);
- 						else res.send(404);
-
-						res.send(json);
-					})
-					.catch(err => {
-						if (err) res.status(500).send(err);
-						res.end();
-					});
-
+		async getById(req, res) {
+			var doc = await Document.$getByUuid(req.params.id)
+			const json = {
+				document: doc.json
 			}
-		}
-	},
+			res.status(200);
+			res.send(json);
+		},
 
-	write: {
+		async create(req, res) {
+			var doc = new Document(req.body);
+			await Document.$create(doc);
+			res.status(200).send({});
+		},
 
-		document: {
-
-			entire(req, res) {
-				
-				// NOTE: Passing the request body, it has to match with the db properties !!
-				document_model.createDocument(req.body)
-					.then(() => {	
-						res.status(200).send({});
-					})
-					.catch(err => {
-						if (err) res.status(500).send(err);
-						res.end();
-					});
-
-			},
-
-			edit(req, res) {
-				// NOTE: Passing the request body, it has to match with the db properties !!
-				document_model.editDocument(req.body)
-					.then(() => {	
-						res.status(200).send({});
-					})
-					.catch(err => {
-						if (err) res.status(500).send(err);
-						res.end();
-					});
-			},
+		async edit(req, res) {
+			var doc = new Document(req.body);
+			await Document.$update(doc);
+			res.status(200).send({});
+		},
 			
-			delete(req, res) {
-
-				// NOTE: Passing the request body, it has to match with the db properties !!
-				document_model.deleteDocument(req.params.id)
-					.then(() => {	
-						res.status(200).send({});
-					})
-					.catch(err => {
-						if (err) res.status(500).send(err);
-						res.end();
-					});
-			}
-
+		async delete(req, res) {
+			await Document.$delete(req.params.id);
+			res.status(200).send({});
 		}
-
-	}
 };
