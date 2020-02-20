@@ -6,6 +6,11 @@ module.exports = {
 		res.status(200).send(data);
 	},
 
+	async get(req, res) {
+		//await User.$get(new Document(rep.params.id))
+		res.status(200).send({});
+	},
+
 	async create(req, res) {
 		await User.$create(new Document(req.body));
 		res.status(200).send({});
