@@ -1,55 +1,23 @@
-const user_model = require('../models/user');
+const User = require('./CRUD/User.js');
 
 module.exports = {
-	read: {
-		authentify(req, res) {
-			console.log(req.body)
-			user_model.authentify(req.body.login, req.body.pwd)
-					.then(data => {
-						if (data) res.status(200);
- 						else res.send(404);
-						res.send(data);
-					})
-					.catch(err => {
-						if (err) res.status(500).send(err);
-						res.end();
-					});
-		}
+	async authentify(req, res) {
+		await User.$authentify(new Document(rep.body))
+		res.status(200).send(data);
 	},
-	write: {
-		user: {
-			addUser(req, res) {
-				user_model.createUser(req.body)
-					.then(() => {	
-						res.status(200).send({});
-					})
-					.catch(err => {
-						if (err) res.status(500).send(err);
-						res.end();
-					});
-			},
 
-			editPwd(req, res) {
-				user_model.editUserPwd(req.body.uuid, req.body.pwd)
-					.then(() => {	
-						res.status(200).send({});
-					})
-					.catch(err => {
-						if (err) res.status(500).send(err);
-						res.end();
-					});
-			},
+	async create(req, res) {
+		await User.$create(new Document(req.body));
+		res.status(200).send({});
+	},
+
+	async edit(req, res) {
+		await user.$edit(new Document(req.body))
+		res.status(200).send({});
+	},
 			
-			delete(req, res) {
-					user_model.deleteUser(req.params.uuid)
-					.then(() => {	
-						res.status(200).send({});
-					})
-					.catch(err => {
-						if (err) res.status(500).send(err);
-						res.end();
-					});
-			}
-		}
+	async delete(req, res) {
+		await User.$delete(req.params.uuid)
+		res.status(200).send({});
 	}
 };
