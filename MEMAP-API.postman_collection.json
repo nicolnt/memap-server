@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "5acadec8-c8eb-4107-8999-ad9e84eb470c",
-		"name": "MEMAP-API",
+		"_postman_id": "f13176a7-5a9e-4fdf-9c8d-77879bfd4d38",
+		"name": "MEMAP-API copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -2358,6 +2358,26 @@
 			"name": "Document",
 			"item": [
 				{
+					"name": "Get All Documents",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/document/cde6c834-405a-4a17-a568-bd774912fda0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"document",
+								"cde6c834-405a-4a17-a568-bd774912fda0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Document by ID",
 					"request": {
 						"method": "GET",
@@ -2468,7 +2488,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"uuid\":\"25f54ef5-9220-4eec-8991-e61d18dc0471\",\n\t\"title\":\"newdoc\"\n\n}",
+							"raw": "{\n\t\"uuid\":\"61976c78-861c-4fed-840b-4a9f0d146f21\",\n\t\"title\":\"newdoc\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2605,6 +2625,186 @@
 							"port": "3000",
 							"path": [
 								"history",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Authentify",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"login\":\"AntoineLibert\",\n\t\"pwd\":\"salutsalut\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "test_TOKEN123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"nom\":\"Libert\",\n\t\"prenom\":\"Antoine\",\n\t\"login\":\"AntoineLibert\",\n\t\"pwd\":\"salutsalut\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "test_TOKEN123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"uuid\":\"aebd5efa-b1f0-4432-8173-5d578123ffad\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/kioijoiuio",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"kioijoiuio"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit User Pwd",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "test_TOKEN123",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"uuid\":\"25f54ef5-9220-4eec-8991-e61d18dc0471\",\n\t\"pwd\":\"salutsalut\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
 								""
 							]
 						}
