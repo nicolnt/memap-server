@@ -21,7 +21,6 @@ module.exports = class Document extends DataClass {
     }
 
 
-
     /////// CRUD ////////
 
     static async $getByUuid(uuid) {

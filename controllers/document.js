@@ -21,18 +21,13 @@ module.exports = {
 			documentList.forEach(element => {
 				json['documents'].push(element.json);
 			});
-
-			res.status(200);
-			res.send(json);
+			res.status(200).send(json);
 		},
 
 		async getById(req, res) {
 			var doc = await Document.$getByUuid(req.params.id)
-			const json = {
-				document: doc.json
-			}
-			res.status(200);
-			res.send(json);
+			const json = {document: doc.json}
+			res.status(200).send(json);
 		},
 
 		async create(req, res) {
