@@ -1,137 +1,72 @@
-const neo4j = require('../db').neo4j;
-const neoDriver = require('../db').driver;
-const express = require('express');
+const neo4j = require('./neo4j');
+
 module.exports = {
 
-	getReference(body) {
-		return new Promise((resolve, reject) => {
-			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
-			session.run(`
+	get(reference) {
+		return await neo4j('READ', 
+		`
 			MATCH (r:Reference) WHERE r.uuidPage = $uuidPage AND r.url = $url AND r.idRef = $idRef
 			RETURN r AS reference
-			`,
-				{
-                    "uuidPage": body.uuidPage,
-                    "url": body.url,
-                    "idRef": body.idRef 
-                })
-				.then(result => { 
-					resolve(result.records);
-				})
-				.catch(error => {
-					reject( error );
-				})
-				.then(() => {
-					session.close();
-				});
-
-		});
+		`,
+		{
+			'uuidPage': reference.uuidPage,
+			'url': reference.url,
+			'idRef': reference.idRef 
+		})
     },
 
-    createReference(body, content) {
-		return new Promise((resolve, reject) => {
-			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
-			session.run(`
-            CREATE (r:Reference)
-            SET r = $props,
-            r.content = $content,
-            r.dateCreated = TIMESTAMP(),
-            r.dateEdit = TIMESTAMP()
-            RETURN r
-            `,
-				{
-                    "props": body,
-                    "content": JSON.stringify(content)
-                })
-				.then(result => { 
-					if (result.records.length >= 1 ) resolve();
-					else reject();
-				})
-				.catch(error => {
-					reject( error );
-				})
-				.then(() => {
-					session.close();
-				});
-
-		});
+    create(reference) {
+		return await neo4j('WRITE', 
+		`
+			CREATE (r:Reference)
+			SET r = $props,
+			r.content = $content,
+			r.dateCreated = TIMESTAMP(),
+			r.dateEdit = TIMESTAMP()
+			RETURN r
+		`,
+		{
+			"props": reference.json,
+			"content": JSON.stringify(reference.content)
+		})
     },
 
-    editReference(body) {
-
-		return new Promise((resolve, reject) => {
-
-            const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
-			session.run(`
+    edit(reference) {
+		return await neo4j('WRITE', 
+		`
 			MATCH (r:Reference) WHERE r.uuidPage = $uuidPage AND r.url = $url AND r.idRef = $idRef
             SET r.content = $content
             RETURN r
-			`,
-				{
-                    "uuidPage": body.uuidPage,
-                    "url": body.url,
-                    "idRef": body.idRef,
-                    "content": body.content
-                })
-				.then(result => { 
-				  resolve();
-				})
-				.catch(error => {
-					reject( error );
-				})
-				.then(() => {
-					session.close();
-				});
-
-		});
+		`,
+		{
+			"uuidPage": reference.uuidPage,
+			"url": reference.url,
+			"idRef": reference.idRef,
+			"content": reference.content
+		})
     },
 
-    deleteReferenceByPage(body) {
-		return new Promise((resolve, reject) => {
-			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
-			session.run(`
+    deleteByPage(uuidPage) {
+		return await neo4j('WRITE', 
+		`
 			MATCH (r:Reference) WHERE r.uuidPage = $uuidPage
 			DELETE r
-			`,
-				{
-                    "uuidPage": uuidPage
-                })
-				.then(result => { 
-				  resolve();
-				})
-				.catch(error => {
-					reject( error );
-				})
-				.then(() => {
-					session.close();
-				});
-
-		});
+		`,
+		{
+			"uuidPage": uuidPage
+		})
 	},
 
-	deleteReference(body) {
-		return new Promise((resolve, reject) => {
-			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
-			session.run(`
+	deleteById(reference) {
+		return await neo4j('WRITE', 
+		`
 			MATCH (r:Reference) WHERE r.uuidPage = $uuidPage AND r.url = $url AND r.idRef = $idRef
 			DELETE r
-			`,
-				{
-					"uuidPage": body.uuidPage,
-                    "url": body.url,
-                    "idRef": body.idRef
-                })
-				.then(result => { 
-				  resolve();
-				})
-				.catch(error => {
-					reject( error );
-				})
-				.then(() => {
-					session.close();
-				});
-
-		});
+		`,
+		{
+			"uuidPage": reference.uuidPage,
+			"url": reference.url,
+			"idRef": reference.idRef
+		})
 	}
-
 }
