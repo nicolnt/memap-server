@@ -44,8 +44,8 @@ module.exports = {
 	},
 
 	async getDocumentByUuid(id) {
-			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
-			var data = await session.run(`
+			return await neo('READ',
+				`
 				MATCH (d:Document) WHERE d.uuid = $uuid
 				SET d.dateConsult = TIMESTAMP() 
 				RETURN d as document
@@ -53,12 +53,11 @@ module.exports = {
 			{
 				"uuid": id 
 			});
-			return data.records[0].get('document').properties;
 	},
 
 	async create(document) {
-		const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE});
-		var data = await session.run(`
+		var data = await neo('WRITE',
+			`
 			CREATE (d:Document)
 			SET d = $props,
 			d.dateCreated = TIMESTAMP(),
@@ -68,7 +67,8 @@ module.exports = {
 			`,
 			{
 				"props": document.json
-			})
+			});
+
 			if(data != undefined) {
 				document.uuid = data.records[0].get('document').properties.uuid;
 				return document;
@@ -78,8 +78,8 @@ module.exports = {
 	},
 
 	edit(document) {
-			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE});
-			session.run(`
+			await neo('WRITE',
+			`
 			MATCH (d:Document) WHERE d.uuid = $uuid
 			SET d += $props,
 			d.dateEdit = TIMESTAMP(),
@@ -93,14 +93,14 @@ module.exports = {
 	},
 
 	delete(id) {
-		const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE});
-		session.run(`
+		await neo('WRITE',
+		`
 		MATCH (d:Document) WHERE d.uuid = $uuid
 		DELETE d
 		`,
 		{
 			"uuid": id,
-		})
+		});
 	}
 }
 

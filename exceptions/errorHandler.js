@@ -7,8 +7,6 @@ module.exports = (err, req, res, next) => {
         getTime() + 'ERROR : ' + err + '\n')
 };
 
-
-
 const getTime = () => {
     const now = new Date();
     const ss = format2num(now.getSeconds());
