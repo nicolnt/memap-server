@@ -1,0 +1,49 @@
+	// Speed result //	
+    getAllWithObject: 5596.314ms
+    getAllDirect: 4042.128ms
+    getAllObjectButJson: 4782.526ms
+
+    // In Document route //
+	router.get('/test', to(document_controller.getAlltest));
+
+    // In Document controllers //	
+        async getAlltest(req, res) {
+			await timer(Document.$getAllObjectTest, 'getAllWithObject', 10000);
+			await timer(Document.$getAllDirectTest, 'getAllDirect', 10000);
+			await timer(Document.$getAllObjectWithoutJsonTest, 'getAllObjectButJson', 10000);
+			res.status(200).send({});
+		},
+
+    // In Document object //
+    static async $getAllObjectTest() {
+        var result = await documentModel.getAll();
+        var documentList = [];
+        result.records.forEach(element => {
+            documentList.push(new Document(element.get('document').properties));
+        });
+        var json = {documents:[]};
+        documentList.forEach(element => {
+            json['documents'].push(element.json);
+        });
+        return json;
+    }
+
+
+    static async $getAllObjectWithoutJsonTest() {
+        var result = await documentModel.getAll();
+        var documentList = [];
+        result.records.forEach(element => {
+            documentList.push(new Document(element.get('document').properties));
+        });
+        return documentList;
+    }
+
+
+    static async $getAllDirectTest() {
+        var result = await documentModel.getAll();
+        var documentList = [];
+        result.records.forEach(element => {
+            documentList.push(element.get('document').properties);
+        });
+        return documentList;
+    }

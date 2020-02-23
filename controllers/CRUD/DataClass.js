@@ -1,17 +1,19 @@
 const DataException = require('../../Exceptions/DataException');
 
 module.exports = class DataClass {
-    constructor() {}
+    constructor() {
+        this.json = {};
+    }
 
     build() {
         Object.keys(this.configuration).forEach((key) => {
             Object.defineProperty(this, key, {
                 get: () => {
-                    return this['_' + key]
+                    return this.json[key];
                 }, 
                 set: (value) => {
                     this.configuration[key].forEach((element) => { element(this, key, value); });
-                    this['_' + key] = value;}
+                    this.json[key] = value;}
                });
         });
     }
@@ -19,6 +21,7 @@ module.exports = class DataClass {
     hydrate(data) {     
         if(data != undefined) {
             Object.keys(data).forEach((key) => {
+                
                 if(this.configuration[key] != undefined) {
                     this[key] = data[key];
                 } else {
@@ -29,16 +32,6 @@ module.exports = class DataClass {
             });
         }
     }
-
-    get json() {  
-        var object = {};   
-        Object.keys(this.configuration).forEach((key) => {
-            object[key] = this[key];
-        });
-        return object;
-    }
-
-    //Faire une methode toString.
 
     isNumeric(object, key, value) { 
         if(typeof value != 'number') {

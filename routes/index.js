@@ -8,7 +8,7 @@ module.exports = function(app) {
 	});
 
 	// NOTE: Serve static files
-	// INFO: Use this route file's path to ppoint to the public folder
+	// INFO: Use this route file's path to point to the public folder
 	app.use('/static', express.static(path.join(__dirname, '../', 'public')));
 
 	require('./neuron')(app);

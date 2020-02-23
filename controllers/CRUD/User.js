@@ -24,7 +24,7 @@ module.exports = class User extends DataClass {
 
     /////// CRUD ////////
     static async $getByUuid(uuid) {
-        return new User(await userModel.getByUuid(uuid));
+        return await userModel.getByUuid(uuid);
     }
 
     static async $authentify(user) {

@@ -7,7 +7,7 @@ module.exports = function(app) {
 
 	app.use('/user', router);
 	
-	router.get('/:uuid', user_controller.get);
+	//router.get('/:uuid', user_controller.get);
 	router.post('/auth', express.json(), user_controller.authentify);
 	router.post('/', express.json(), user_controller.create);
 	router.put('/pwd', express.json(), user_controller.edit);

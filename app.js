@@ -1,4 +1,5 @@
 const express = require('express');
+const errorHandler = require('./exceptions/errorHandler');
 const app = express();
 
 app.use(function(req, res, next) {
@@ -22,6 +23,11 @@ app.use((req, res, next) => {
 });
 
 require('./routes/index')(app);
+
+app.use(function(err, req, res, next) {
+	errorHandler(err, req, res, next)
+});
+
 
 const port = 3000;
 if (!module.parent) {

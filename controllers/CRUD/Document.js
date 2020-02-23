@@ -19,20 +19,18 @@ module.exports = class Document extends DataClass {
         this.build();
         this.hydrate(data);   
     }
-
-
-
+    
     /////// CRUD ////////
-
     static async $getByUuid(uuid) {
-        return new Document(await documentModel.getDocumentByUuid(uuid));
+         const result = await documentModel.getDocumentByUuid(uuid);
+         return result.records[0].get('document').properties;
     }
 
     static async $getAll() {
-        var result = await documentModel.getAll();
-        var documentList = [];
+        const result = await documentModel.getAll();
+        let documentList = [];
         result.records.forEach(element => {
-            documentList.push(new Document(element.get('document').properties));
+            documentList.push(element.get('document').properties);
         });
         return documentList;
     }
