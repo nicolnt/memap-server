@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const to = require('../exceptions/errorCatcher');
 
-const document_controller = require('../controllers/document');
+
+const document_controller = require('../controllers/interface/document');
 
 module.exports = function(app) {
-	
+
 	app.use('/document', router);
 
 	router.get('/all', to(document_controller.getAll));
