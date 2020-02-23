@@ -9,3 +9,7 @@ const driver = neo4j.driver(
 
 module.exports.neo4j = neo4j;
 module.exports.driver = driver;
+module.exports.neo = async (mode, req, params) => {
+    const session = driver.session({ defaultAccessMode: neo4j.session[mode] });
+    return await session.run(req, params)
+	}

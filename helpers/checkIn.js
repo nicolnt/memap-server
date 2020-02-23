@@ -1,10 +1,10 @@
-const DataInContentException = require('../Exceptions/DataInContentException');
+const RequireDataError = require('../Exceptions/RequireDataError');
 
 module.exports = {
-	require(object, fields) {
+	isRequire(object, fields) {
         fields.forEach(field => {
             if(!object.hasOwnProperty(field)) {
-                throw new DataInContentException(object, field);
+                throw new RequireDataError(field);
             }
         });
     }
