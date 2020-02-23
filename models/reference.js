@@ -1,8 +1,8 @@
-const neo4j = require('./neo4j');
+const neo4j = require('./db').neo;
 
 module.exports = {
 
-	get(reference) {
+	async get(reference) {
 		return await neo4j('READ', 
 		`
 			MATCH (r:Reference) WHERE r.uuidPage = $uuidPage AND r.url = $url AND r.idRef = $idRef
@@ -15,38 +15,38 @@ module.exports = {
 		})
     },
 
-    create(reference) {
+    async create(reference) {
 		return await neo4j('WRITE', 
 		`
 			CREATE (r:Reference)
 			SET r = $props,
-			r.content = $content,
+			r.cache = $cache,
 			r.dateCreated = TIMESTAMP(),
 			r.dateEdit = TIMESTAMP()
 			RETURN r
 		`,
 		{
 			"props": reference.json,
-			"content": JSON.stringify(reference.content)
+			"cache": reference.content
 		})
     },
 
-    edit(reference) {
+	 async edit(reference) {
 		return await neo4j('WRITE', 
 		`
 			MATCH (r:Reference) WHERE r.uuidPage = $uuidPage AND r.url = $url AND r.idRef = $idRef
-            SET r.content = $content
+            SET r.cache = $cache
             RETURN r
 		`,
 		{
 			"uuidPage": reference.uuidPage,
 			"url": reference.url,
 			"idRef": reference.idRef,
-			"content": reference.content
+			"cache": reference.cache
 		})
     },
 
-    deleteByPage(uuidPage) {
+    async deleteByPage(uuidPage) {
 		return await neo4j('WRITE', 
 		`
 			MATCH (r:Reference) WHERE r.uuidPage = $uuidPage
@@ -57,7 +57,7 @@ module.exports = {
 		})
 	},
 
-	deleteById(reference) {
+	async deleteById(reference) {
 		return await neo4j('WRITE', 
 		`
 			MATCH (r:Reference) WHERE r.uuidPage = $uuidPage AND r.url = $url AND r.idRef = $idRef

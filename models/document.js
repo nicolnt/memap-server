@@ -1,6 +1,6 @@
-const neo4j = require('../db').neo4j;
-const neoDriver = require('../db').driver;
-const neo = require('./neo4j');
+const neo4j = require('./db').neo4j;
+const neoDriver = require('./db').driver;
+const neo = require('./db').neo;
 
 module.exports = {
 
@@ -77,26 +77,26 @@ module.exports = {
 			}
 	},
 
-	edit(document) {
-			await neo('WRITE',
-			`
-			MATCH (d:Document) WHERE d.uuid = $uuid
-			SET d += $props,
-			d.dateEdit = TIMESTAMP(),
-			d.dateConsult = TIMESTAMP()
-			RETURN d
-			`,
-				{
-					"uuid": document.uuid,
-					"props": document.json
-			})
-	},
-
-	delete(id) {
+	async edit(document) {
 		await neo('WRITE',
 		`
 		MATCH (d:Document) WHERE d.uuid = $uuid
-		DELETE d
+		SET d += $props,
+		d.dateEdit = TIMESTAMP(),
+		d.dateConsult = TIMESTAMP()
+		RETURN d
+		`,
+		{
+			"uuid": document.uuid,
+			"props": document.json
+		})
+	},
+
+	async delete(id) {
+		await neo('WRITE',
+		`
+			MATCH (d:Document) WHERE d.uuid = $uuid
+			DELETE d
 		`,
 		{
 			"uuid": id,

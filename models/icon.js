@@ -1,5 +1,5 @@
-const neo4j = require('../db').neo4j;
-const neoDriver = require('../db').driver;
+const neo4j = require('./db').neo4j;
+const neoDriver = require('./db').driver;
 
 module.exports = {
 
