@@ -1,0 +1,48 @@
+	// Speed result //	
+	getAllDocument: 5481.109ms
+	getAllJustTitle: 4233.818ms
+
+    // In Document route //
+	router.get('/test', to(document_controller.getAlltest));
+
+    // In Document interface //	
+        async getAlltest(req, res) {
+			await timer(Document.$getAllObjectTest, 'getAllWithObject', 10000);
+			await timer(Document.$getAllDirectTest, 'getAllDirect', 10000);
+			await timer(Document.$getAllObjectWithoutJsonTest, 'getAllObjectButJson', 10000);
+			res.status(200).send({});
+		},
+
+    // In Document object //
+    static async $getAllDocument() {
+        return await documentModel.getAll();
+    }
+
+    static async $getAllJustTitle() {
+        return await documentModel.getAllTitleTest();
+    }
+
+    // In Document model //
+	async getAll() {
+			return await neo('READ', 
+				`
+				MATCH (d:Document)
+				RETURN d as document
+				`,
+				{}
+			);
+	},
+
+	async getAllTitleTest() {
+		return await neo('READ', 
+			`
+			MATCH (d:Document)
+			RETURN d.title as document
+			`,
+			{}
+		);
+},
+
+// Conclusion : it will be speeder to select directy the element we want
+// In the neo4j request.
+// Even if we pick all the field one by one, it's shorter.

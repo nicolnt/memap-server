@@ -8,9 +8,8 @@
 
     // In Document controllers //	
         async getAlltest(req, res) {
-			await timer(Document.$getAllObjectTest, 'getAllWithObject', 10000);
-			await timer(Document.$getAllDirectTest, 'getAllDirect', 10000);
-			await timer(Document.$getAllObjectWithoutJsonTest, 'getAllObjectButJson', 10000);
+			await timer(Document.$getAllDocument, 'getAllDocument', 10000);
+			await timer(Document.$getAllJustTitle, 'getAllJustTitle', 10000);
 			res.status(200).send({});
 		},
 
