@@ -27,6 +27,7 @@ module.exports = class Document extends DataClass {
     }
 
     static async $getAll() {
+
         const result = await documentModel.getAll();
         let documentList = [];
         result.records.forEach(element => {
@@ -40,11 +41,7 @@ module.exports = class Document extends DataClass {
     }
 
     static async $delete(document) {
-        if(document.uuid != undefined) {
-            documentModel.delete(document.uuid);
-        } else {
-            // exception
-        }  
+        documentModel.delete(document.uuid);
     }
 
     static async $create(document) {

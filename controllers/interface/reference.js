@@ -1,7 +1,9 @@
 const Reference = require('../CRUD/Reference');
+const checkIn = require('../../helpers/checkIn');
 
 module.exports = {
-    getExt(req, res) {
+    async getExt(req, res) {
+        checkIn.isRequire(req.body, ['uuidPage', 'url', 'idRef']);
         let reference = new Reference(req.body);
         await Reference.$searchExt(reference)
         res.status(200).send({
@@ -11,14 +13,16 @@ module.exports = {
             'cache': reference.cache
         })
     }, 
-    getPage(req, res) {
+    async getPage(req, res) {
+        checkIn.isRequire(req.body, ['url']);
         const content = await Reference.$searchPage(req.body.url);
         res.status(200).send({
             'content':content
         })
     }, 
 
-    getInt(req, res) {
+    async getInt(req, res) {
+        checkIn.isRequire(req.body, ['uuidPage', 'url', 'idRef']);
         let reference = new Reference(req.body);
         await Reference.$searchInt(reference)
         res.status(200).send({
@@ -28,11 +32,13 @@ module.exports = {
             'cache': reference.cache
         })
     },
-    edit(req, res) {
+    async edit(req, res) {
+        checkIn.isRequire(req.body, ['uuidPage', 'url', 'idRef', 'cache']);
         let reference = new Reference(req.body);
         await Reference.$edit(reference)
+        res.status(200).send({});
     },
-    delete(req, res) {
+    async delete(req, res) {
         await Reference.$delete(req.params.id);
         res.status(200).send({});
     }

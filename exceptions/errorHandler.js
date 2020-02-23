@@ -2,9 +2,11 @@ module.exports = (err, req, res, next) => {
     const fs = require('fs')
     res.status(err.code).send({error:err.message});
     console.error("Error: " + err.stack);
-    fs.appendFileSync(
-        'exceptions/log/' + getDate() + 'error.txt', 
-        getTime() + 'ERROR : ' + err + '\n')
+    if(err.code != 200) {
+        fs.appendFileSync(
+            'exceptions/log/' + getDate() + 'error.txt', 
+            getTime() + 'ERROR : ' + err + '\n')
+    }
 };
 
 const getTime = () => {

@@ -1,8 +1,10 @@
-const User = require('./CRUD/User.js');
+const User = require('../CRUD/User.js');
+const checkIn = require('../../helpers/checkIn');
 
 module.exports = {
 	async authentify(req, res) {
-		await User.$authentify(new Document(rep.body))
+		checkIn.isRequire(req.body, ['login', 'pwd']);
+		await User.$authentify(new User(rep.body))
 		res.status(200).send({});
 	},
 
@@ -18,12 +20,14 @@ module.exports = {
 	},
 
 	async create(req, res) {
-		await User.$create(new Document(req.body));
+		checkIn.isRequire(req.body, ['login', 'pwd']);
+		await User.$create(new User(req.body));
 		res.status(200).send({});
 	},
 
 	async edit(req, res) {
-		await user.$edit(new Document(req.body))
+		checkIn.isRequire(req.body, ['login', 'pwd', 'oldpwd']);
+		await user.$edit(new User(req.body))
 		res.status(200).send({});
 	},
 			

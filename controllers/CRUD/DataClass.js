@@ -50,7 +50,7 @@ module.exports = class DataClass {
     }
 
     isString(object, key, value) { 
-        if(typeof value != 'string') {
+        if(typeof value != 'string' && value != null) {
             var message = 'Attribute ' + key + ' of '
             + object.__proto__.constructor.name + ' should be a String.'
             throw new DataException(message);
