@@ -3,7 +3,13 @@ const User = require('./CRUD/User.js');
 module.exports = {
 	async authentify(req, res) {
 		await User.$authentify(new Document(rep.body))
-		res.status(200).send(data);
+		res.status(200).send({});
+	},
+
+	async getById(req, res) {
+		res.status(200).send({
+			user: await User.$getByUuid(rep.params.uuid)
+		});
 	},
 
 	async create(req, res) {

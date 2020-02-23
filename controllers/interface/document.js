@@ -1,5 +1,6 @@
-const document_model = require('../models/document');
-const Document = require('./CRUD/Document.js');
+const document_model = require('../../models/document');
+const Document = require('../CRUD/Document.js');
+const timer = require('../../dev/timer.js');
 
 module.exports = {
 		neuronsConnectedToDocument(req, res) {
@@ -16,29 +17,24 @@ module.exports = {
 		},
 
 		async getAll(req, res) {
-			var documentList = await Document.$getAll();
-			var json = {documents:[]};
-			documentList.forEach(element => {
-				json['documents'].push(element.json);
+			res.status(200).send({
+				documents: await Document.$getAll()
 			});
-			res.status(200).send(json);
 		},
 
 		async getById(req, res) {
-			var doc = await Document.$getByUuid(req.params.id)
-			const json = {document: doc.json}
-			res.status(200).send(json);
+			res.status(200).send({
+				document: await Document.$getByUuid(req.params.id)
+			});
 		},
 
 		async create(req, res) {
-			var doc = new Document(req.body);
-			await Document.$create(doc);
+			await Document.$create(new Document(req.body));
 			res.status(200).send({});
 		},
 
 		async edit(req, res) {
-			var doc = new Document(req.body);
-			await Document.$update(doc);
+			await Document.$update(new Document(req.body));
 			res.status(200).send({});
 		},
 			
