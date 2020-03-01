@@ -1,0 +1,44 @@
+// Speed result //	
+    getAllNeode x 10000: 5413.162ms
+    getAllNeo4j x 10000: 4613.422ms
+
+    // In Document route //
+	router.get('/test', to(document_controller.getAllTest));
+
+    // In Document controllers //	
+		async getAllTest(req, res) {
+			await timer(Document.$getAll, 'getAllNeo4j x 10000', 10000);
+			await timer(Document.$getAllNeode, 'getAllNeode x 10000', 10000);
+			res.status(200).send({})
+		},
+
+    // In Document object //
+    static async $getAll() {
+        const result = await documentModel.getAll();
+        let documentList = [];
+        result.records.forEach(element => {
+            documentList.push(element.get('document').properties);
+        });
+        return true //documentList;
+    }
+
+    static async $getAllNeode() {
+        const result = await db.all('Document')
+        return await result.toJson();
+    }
+
+
+    // In Document model //
+	async getAll() {
+			return await neo('READ', 
+				`
+				MATCH (d:Document)
+				RETURN d as document
+				`,
+				{}
+			);
+	},
+
+Conclusion : le passage par l'OGM semble manger un peu de temps, mais cela n'est pas non plus dramatique.
+Je pense qu'on peut se permettre de passer par l'OGM tout de même quitte à passer certaines requête 
+par des requêtes classique, ce qui est possible en passant par l'OGM et sans perte de performance.
