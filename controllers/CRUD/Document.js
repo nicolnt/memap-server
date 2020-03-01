@@ -1,8 +1,10 @@
 const DataClass = require('./DataClass.js');
 const documentModel = require('../../models/document.js');
+const db = require('../../models/neode.js');
 
 module.exports = class Document extends DataClass {
-    
+    static label = 'Document'
+
     constructor(data) {
         super();
 
@@ -22,29 +24,25 @@ module.exports = class Document extends DataClass {
     
     /////// CRUD ////////
     static async $getByUuid(uuid) {
-         const result = await documentModel.getDocumentByUuid(uuid);
-         return result.records[0].get('document').properties;
+        return (await db.find(this.label, uuid)).properties();
     }
 
     static async $getAll() {
-
-        const result = await documentModel.getAll();
-        let documentList = [];
-        result.records.forEach(element => {
-            documentList.push(element.get('document').properties);
-        });
-        return documentList;
+        const result = await db.all(this.label)
+        return await result.map((v) => {
+            return v.properties();
+        })
     }
 
     static async $update(document) {
-        documentModel.edit(document);
+        db.merge(this.label, document.json);
     }
 
     static async $delete(document) {
-        documentModel.delete(document.uuid);
+        (await db.find(this.label, document.uuid)).delete()
     }
 
     static async $create(document) {
-        documentModel.create(document);
+        db.create(this.label, document.json);
     }
 };

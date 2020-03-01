@@ -8,7 +8,7 @@ module.exports = function(app) {
 
 	app.use('/document', router);
 
-	router.get('/test', to(interface.getAlltest));
+	router.get('/test', to(interface.getAllTest));
 	router.get('/all', to(interface.getAll));
 	router.get('/:id', to(interface.getById));
 	router.get('/:uuidDoc/neurons', to(interface.neuronsConnectedToDocument));
