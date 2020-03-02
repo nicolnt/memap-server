@@ -1,8 +1,13 @@
 const DataException = require('../../Exceptions/DataException');
 
 module.exports = class DataClass {
-    constructor() {
-        this.json = {};
+    json = {}
+    configuration = {}
+
+    constructor(data, conf) {
+        this.configuration = conf
+        this.build()
+        this.hydrate(data)
     }
 
     build() {
@@ -12,7 +17,7 @@ module.exports = class DataClass {
                     return this.json[key];
                 }, 
                 set: (value) => {
-                    this.configuration[key].forEach((element) => { element(this, key, value); });
+                    this.configuration[key].forEach((element) => { this[element](this, key, value); });
                     this.json[key] = value;}
                });
         });
