@@ -1,7 +1,6 @@
 const document_model = require('../../models/document');
 const Document = require('../CRUD/Document.js');
 const checkIn = require('../../helpers/checkIn');
-const timer = require('../../dev/timer');
 
 module.exports = {
 		neuronsConnectedToDocument(req, res) {

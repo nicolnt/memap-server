@@ -13,5 +13,14 @@ module.exports = {
     },
     content: {
         type: 'string',
+    },
+    createAt: {
+        type: 'datetime',
+    },
+    editAt: {
+        type: 'datetime',
+    },
+    consultAt: {
+        type: 'datetime',
     }
 };

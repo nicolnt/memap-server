@@ -1,48 +1,34 @@
 const DataClass = require('./DataClass.js');
-const documentModel = require('../../models/document.js');
 const db = require('../../models/neode.js');
 
 module.exports = class Document extends DataClass {
+    /////// Database label ////////
     static label = 'Document'
 
+    /////// Configuration ////////
     constructor(data) {
-        super();
-
-        this.configuration =
-        {
-            uuid: [],
-            title: [this.isString],
-            content: [this.isString],
-            dateCreated: [],
-            dateEdit: [],
-            dateConsult: [],
-        }
-
-        this.build();
-        this.hydrate(data);   
+        super(data,
+            {
+                uuid: [],
+                title: ['isString'],
+                content: ['isString'],
+                createAt: [],
+                editAt: [],
+                consultAt: []
+            });
     }
     
     /////// CRUD ////////
-    static async $getByUuid(uuid) {
-        return (await db.find(this.label, uuid)).properties();
+    static $getByUuid = async (uuid) => {
+        let result = await db.find(this.label, uuid)
+        return (result) ? result.properties() : false
     }
 
-    static async $getAll() {
-        const result = await db.all(this.label)
-        return await result.map((v) => {
-            return v.properties();
-        })
-    }
+    static $getAll = async () => await (await db.all(this.label)).map((v) => v.properties())
 
-    static async $update(document) {
-        db.merge(this.label, document.json);
-    }
+    static $create = async (document) => await db.create(this.label, {...document.json, createAt:new Date})
 
-    static async $delete(document) {
-        (await db.find(this.label, document.uuid)).delete()
-    }
+    static $update = async (document) => await db.merge(this.label, {...document.json, editAt:new Date})
 
-    static async $create(document) {
-        db.create(this.label, document.json);
-    }
+    static $delete = async (document) => (await db.find(this.label, document.uuid)).delete()
 };

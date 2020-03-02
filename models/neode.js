@@ -9,4 +9,6 @@ const instance = require('neode').fromEnv().with({
 
 module.exports = new Neode('bolt://localhost:7687', 'neo4j', 'admin').with({
 			Document: require('../NeodeModels/document'),
+			Reference: require('../NeodeModels/reference'),
+			User: require('../NeodeModels/user'),
 		})
