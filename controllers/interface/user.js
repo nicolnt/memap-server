@@ -20,19 +20,20 @@ module.exports = {
 	},
 
 	async create(req, res) {
-		checkIn.isRequire(req.body, ['login', 'pwd']);
+		checkIn.isRequire(req.body, ['pseudo', 'pwd']);
 		await User.$create(new User(req.body));
 		res.status(200).send({});
 	},
 
 	async edit(req, res) {
-		checkIn.isRequire(req.body, ['login', 'pwd', 'oldpwd']);
-		await user.$edit(new User(req.body))
+		//checkIn.isRequire(req.body, ['login', 'pwd', 'oldpwd']);
+		await User.$update(new User(req.body))
 		res.status(200).send({});
 	},
 			
 	async delete(req, res) {
-		await User.$delete(req.params.uuid)
+		checkIn.isRequire(req.body, ['uuid']);
+		await User.$delete(req.body)
 		res.status(200).send({});
 	}
 };

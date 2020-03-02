@@ -10,6 +10,7 @@ module.exports = function(app) {
 	//router.get('/:uuid', user_controller.get);
 	router.post('/auth', express.json(), user_controller.authentify);
 	router.post('/', express.json(), user_controller.create);
+	router.put('/', express.json(), user_controller.edit);
 	router.put('/pwd', express.json(), user_controller.edit);
-	router.delete('/:uuid', user_controller.delete);
+	router.delete('/:uuid', express.json(), user_controller.delete);
 };

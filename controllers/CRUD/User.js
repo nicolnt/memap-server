@@ -1,49 +1,33 @@
 const DataClass = require('./DataClass.js');
-const userModel = require('../../models/user.js');
+const db = require('../../models/neode.js');
 
 module.exports = class User extends DataClass {
-    
+    /////// Database label ////////
+    static label = 'User'
+
+    /////// Configuration ////////
     constructor(data) {
-        super();
-
-        this.configuration =
-        {
-            uuid: [],
-            firstname: [this.isString],
-            lastname: [this.isString],
-            pseudo: [this.isString],
-            pwd: [this.isString],
-            dateCreated: [],
-            lastConnection: [],
-        }
-
-        this.build();
-        this.hydrate(data);   
+        super(data,
+            {
+                uuid: [],
+                firstname: ['isString'],
+                lastname: ['isString'],
+                pseudo: ['isString'],
+                pwd: ['isString'],
+                createAt: [],
+                editAt: [],
+                lastConnection: [],
+            });
     }
-
 
     /////// CRUD ////////
-    static async $getByUuid(uuid) {
-        return await userModel.getByUuid(uuid);
-    }
+    //static async $authentify(user) {userModel.authentify(new User(user));} A REFAIRE
 
-    static async $authentify(user) {
-        userModel.authentify(new User(user));
-    }
+    static $getByUuid = async (uuid) => (await db.find(this.label, uuid)).properties()
 
-    static async $update(user) {
-        return userModel.edit(user);
-    }
+    static $create = async (user) => await db.create(this.label, {...user.json, createAt:new Date})
 
-    static async $delete(user) {
-        if(user.uuid != undefined) {
-            userModel.delete(user.uuid);
-        } else {
-            // exception
-        }  
-    }
+    static $update = async (user) => await db.merge(this.label, {...user.json, editAt:new Date})
 
-    static async $create(user) {
-        userModel.create(user);
-    }
+    static $delete = async (user) => (await db.find(this.label, user.uuid)).delete()
 };
