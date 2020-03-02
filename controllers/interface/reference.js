@@ -2,6 +2,14 @@ const Reference = require('../CRUD/Reference');
 const checkIn = require('../../helpers/checkIn');
 
 module.exports = {
+    
+    async getPage(req, res) {
+        checkIn.isRequire(req.body, ['url']);
+        const content = await Reference.$searchPage(req.body.url);
+        res.status(200).send({
+            'content':content
+        })
+    }, 
     async getExt(req, res) {
         checkIn.isRequire(req.body, ['uuidPage', 'url', 'idRef']);
         let reference = new Reference(req.body);
@@ -13,14 +21,6 @@ module.exports = {
             'cache': reference.cache
         })
     }, 
-    async getPage(req, res) {
-        checkIn.isRequire(req.body, ['url']);
-        const content = await Reference.$searchPage(req.body.url);
-        res.status(200).send({
-            'content':content
-        })
-    }, 
-
     async getInt(req, res) {
         checkIn.isRequire(req.body, ['uuidPage', 'url', 'idRef']);
         let reference = new Reference(req.body);
