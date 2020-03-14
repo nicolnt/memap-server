@@ -12,6 +12,7 @@ module.exports = function(app) {
 	app.use('/static', express.static(path.join(__dirname, '../', 'public')));
 
 	require('./neuron')(app);
+	require('./neuron-bubble')(app);
 	require('./network')(app);
 	require('./document')(app); 
 	require('./icon')(app); 

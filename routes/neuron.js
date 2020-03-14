@@ -21,6 +21,5 @@ module.exports = function(app) {
 	router.put('/:uuid/unselect', neuron_controller.write.neuron.unselect);
 
 	router.delete('/:uuid', express.json(),neuron_controller.write.neuron.delete);
-	router.post('/', express.json(), neuron_controller.write.neuron.entire);
-
+	router.post('/', express.json(), neuron_controller.addNeuron);
 };

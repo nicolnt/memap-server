@@ -1,41 +1,75 @@
 const neo4j = require('./db').neo4j;
 const neoDriver = require('./db').driver;
 
-module.exports = {
+//const neuronDB = require('../database/neuron');
 
-	getNeuronUUIDByID(id) {
-		return new Promise((resolve, reject) => {
+/**
+ * @description External function that recovers data for complex neuron data retrieval.
+ * It aims at keeping the API calls straightforward.
+ */
+function extractNeuronData(record) {
+	let data = {  };
+	data.neuron = record.get('neuron').properties;
+	data.tags = record.get('tags').map(tag => { return tag.properties });
+	data.documents = record.get('documents').map(doc => { return doc.properties });
+	data.files = record.get('files').map(file => { return file.properties });
+	data.documents = record.get('documents').map(doc => { return doc.properties });
+	data.favorite = record.get('favorite');
+	data.selected = record.get('selected');
+
+	const icon = record.get('icon'); 
+	if (icon)
+		data.icon = icon.properties;
+
+	const type = record.get('type'); 
+	if (type) {
+		data.type = type.properties;
+		const type_icon = record.get('type_icon');
+		if (type_icon) 
+			data.type.icon = type_icon.properties;
+	}
+
+	return data;
+}
+function extractNeuronBubbleData(record) {
+	let data = record.get('neuron').properties;
+	data.favorite = record.get('favorite');
+	data.selected = record.get('selected');
+
+	const icon = record.get('icon'); 
+	if (icon)
+		data.icon = icon.properties;
+	else
+		data.icon = null
+
+	return data;
+}
+
+
+module.exports = {
+	getNeuronUUIDByID(idNeuron) {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
-			session.run(`
-		MATCH (neuron:Neuron)
-		WHERE ID(neuron) = $id
-		RETURN neuron.uuid AS uuid
+			return session.run(`
+			MATCH (neuron:Neuron)
+			WHERE ID(neuron) = $id
+			RETURN neuron.uuid AS uuid
 			`,
 				{
-					id
+					id: idNeuron
 				})
 				.then(result => {
-
-					let data = {};
-
-					if (result.records.length >= 1 ) data = result.records[0].get('uuid');
-
-					resolve( data );
+					let data = { };
+					if (result.records.length >= 1 )
+						data = result.records[0].get('uuid');
+					return data;
 				})
-				.catch(error => {
-					reject( error );
-				})
-				.then(() => {
-					session.close();
-				});
-
-		});
+			.catch(error => Promise.reject( error ))
+			.finally(() => session.close());
 	},
 	getNeuronByID(id) {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
 			session.run(`
-
 			MATCH (neuron:Neuron) WHERE ID(neuron) = $id
 			OPTIONAL MATCH (neuron)-[:HAS_TAG]->(tag:Tag)
 			OPTIONAL MATCH (tag)-[:HAS_ICON]->(iTag:Icon)
@@ -59,9 +93,7 @@ module.exports = {
 					id
 				})
 				.then(result => {
-
 					let data = {};
-
 					if (result.records.length >= 1 ) {
 						data = result.records[0].get('myNeuron');
 						data.tags = data.tags.map(tag => { return tag.properties });
@@ -81,11 +113,68 @@ module.exports = {
 
 		});
 	},
-	getNeuronByUUID(uuid) {
+	getNeuronBubbleByUUIDIfChangedAfterTimestamp(uuidNeuron, timestamp) {
+		timestamp = parseInt(timestamp);
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
 			session.run(`
 			MATCH (neuron:Neuron {uuid: $uuid})
+			WHERE neuron.dateEdited > $timestamp
+			OPTIONAL MATCH (neuron)-[:HAS_ICON]->(icon:Icon)
+
+			RETURN neuron, icon,
+			"SELECTED" IN LABELS(neuron) AS selected,
+			"FAVORITE" IN LABELS(neuron) AS favorite
+			`,
+				{
+					uuid: uuidNeuron,
+					timestamp
+				})
+				.then(result => {
+					let data;
+					if (result.records.length >= 1 )
+						data = extractNeuronBubbleData(result.records[0]);
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
+	getNeuronBubbleByUUID(uuid) {
+		const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
+
+		return session.run(`
+			MATCH (neuron:Neuron {uuid: $uuid})
+			OPTIONAL MATCH (neuron)-[:HAS_ICON]->(icon:Icon)
+
+			RETURN neuron, icon,
+			"SELECTED" IN LABELS(neuron) AS selected,
+			"FAVORITE" IN LABELS(neuron) AS favorite
+			`,
+			{
+				uuid
+			})
+			.then(result => {
+				let data = {}; // TODO try without initializing data so it is returned as undefined.
+				if (result.records.length >= 1 )
+					data = extractNeuronBubbleData(result.records[0]);
+				return data;
+			})
+			.catch(error => Promise.reject(error))
+			.finally(() => session.close());
+	},
+	getNeuronByUUIDIfChangedAfterTimestamp(uuidNeuron, timestamp) {
+		timestamp = parseInt(timestamp);
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
+			session.run(`
+			MATCH (neuron:Neuron {uuid: $uuid})
+			WHERE neuron.dateEdited > $timestamp
 			OPTIONAL MATCH (neuron)-[:HAS_TAG]->(tag:Tag)
 			OPTIONAL MATCH (tag)-[:HAS_ICON]->(iTag:Icon)
 			OPTIONAL MATCH (neuron)-[:HAS_TYPE]->(type:Type)
@@ -102,31 +191,13 @@ module.exports = {
 			COLLECT(DISTINCT file) AS files
 			`,
 				{
-					uuid
+					uuid: uuidNeuron,
+					timestamp
 				})
 				.then(result => {
-
-					let data = {};
-
-					if (result.records.length >= 1 ) {
-						data.neuron = result.records[0].get('neuron').properties;
-						data.tags = result.records[0].get('tags').map(tag => { return tag.properties });
-						data.documents = result.records[0].get('documents').map(doc => { return doc.properties });
-						data.files = result.records[0].get('files').map(file => { return file.properties });
-						data.documents = result.records[0].get('documents').map(doc => { return doc.properties });
-						data.favorite = result.records[0].get('favorite');
-						data.selected = result.records[0].get('selected');
-
-						const icon = result.records[0].get('icon'); 
-						if (icon) data.icon = icon.properties;
-						const type = result.records[0].get('type'); 
-						if (type) {
-							data.type = type.properties;
-							const type_icon = result.records[0].get('type_icon');
-							if (type_icon) data.type.icon = type_icon.properties;
-						}
-					}
-
+					let data;
+					if (result.records.length >= 1 )
+						data = extractNeuronData(result.records[0]);
 					resolve( data );
 				})
 				.catch(error => {
@@ -137,6 +208,38 @@ module.exports = {
 				});
 
 		});
+	},
+	getNeuronByUUID(uuid) {
+		const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
+
+		return session.run(`
+			MATCH (neuron:Neuron {uuid: $uuid})
+			OPTIONAL MATCH (neuron)-[:HAS_TAG]->(tag:Tag)
+			OPTIONAL MATCH (tag)-[:HAS_ICON]->(iTag:Icon)
+			OPTIONAL MATCH (neuron)-[:HAS_TYPE]->(type:Type)
+			OPTIONAL MATCH (type)-[:HAS_ICON]->(iType:Icon)
+			OPTIONAL MATCH (neuron)-[:HAS_ICON]->(icon:Icon)
+			OPTIONAL MATCH (neuron)-[:HAS_FILE]->(file:File)
+			OPTIONAL MATCH (neuron)-[:HAS_DOCUMENT]->(document:Document)
+
+			RETURN neuron, type, icon, iType AS type_icon,
+			COLLECT(DISTINCT tag) AS tags,
+			"SELECTED" IN LABELS(neuron) AS selected,
+			"FAVORITE" IN LABELS(neuron) AS favorite,
+			COLLECT(DISTINCT document) AS documents,
+			COLLECT(DISTINCT file) AS files
+			`,
+			{
+				uuid
+			})
+			.then(result => {
+				let data = {}; // TODO try without initializing data so it is returned as undefined.
+				if (result.records.length >= 1 )
+					data = extractNeuronData(result.records[0]);
+				return data;
+			})
+			.catch(error => Promise.reject(error))
+			.finally(() => session.close());
 	},
 	deleteByUUID(uuid) {
 		return new Promise((resolve, reject) => {
@@ -675,38 +778,30 @@ module.exports = {
 
 		});
 	},
-	createNeuron(body) {
-		return new Promise((resolve, reject) => {
-			const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
-			session.run(`
+	/**
+	 * @returns Newly created neuron internal Neo4j ID (not yet UUID)
+	 */
+	// NOTE Removed return Promise as Neo4j driver already does this for us.
+	// replaced last then by finally to make sure we clause the session when we're done.
+	createNeuron(neuronProperties) {
+		const session = neoDriver.session({ defaultAccessMode: neo4j.session.WRITE });
+
+		return session.run(`
 		CREATE (neuron:Neuron)
-			SET neuron = $body,
+			SET neuron = $neuronProperties,
 			neuron.dateCreated = TIMESTAMP(),
 			neuron.dateEdited = TIMESTAMP(),
 			neuron.dateConsulted = TIMESTAMP()
 			RETURN ID(neuron) AS id
 			`, {
-				body 
+				neuronProperties 
 			})
-				.then(result => {
-
-					let id;
-					if (result.records.length >= 1 ) id = result.records[0].get('id');
-
-					this.getNeuronUUIDByID(id).then( data => {
-						resolve( data );
-					}).catch(err => {
-						reject(err);
-					});
-
-				})
-				.catch(error => {
-					reject( error );
-				})
-				.then(() => {
-					session.close();
-				});
-
-		});
+			.then(result => {
+				let data = {  };
+				if (result.records.length >= 1 ) data.id = result.records[0].get('id');
+				return data;
+			})
+			.catch(error => Promise.reject( error ))
+			.finally(() => session.close());
 	}
 }
