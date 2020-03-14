@@ -80,3 +80,19 @@ MATCH (t:Type {name: $name})
 OPTIONAL MATCH (t)-[r:HAS_ICON]-(i:Icon)
 DELETE r
 RETURN t AS type
+
+
+// NOTE: Get links around 
+MATCH (center:Neuron {uuid: $uuid})-[r]-(linkedNeuron:Neuron)
+OPTIONAL MATCH (linkedNeuron)-[rp:IS_PARENT]->(o1:Neuron) WHERE o1 <> center 
+OPTIONAL MATCH (linkedNeuron)<-[rc:IS_PARENT]-(o2:Neuron) WHERE o2 <> center
+OPTIONAL MATCH (linkedNeuron)-[rf:IS_FRIEND]-(o3:Neuron) WHERE o3 <> center
+RETURN { 
+	name: linkedNeuron.name,
+	relationship_type: TYPE(r),
+	from: STARTNODE(r).uuid,
+	neuronUUID: linkedNeuron.uuid,
+	nChildren: COUNT(DISTINCT rp),
+    nParents: COUNT(DISTINCT rc),
+    nFriends: COUNT(DISTINCT rf)
+} AS myNeuron
