@@ -3,6 +3,47 @@ const neoDriver = require('./db').driver;
 
 module.exports = {
 
+	getCloseNetworkAndFurtherLinksByNeuronUUID(uuid) {
+		return new Promise((resolve, reject) => {
+			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });
+			session.run(`
+			MATCH (center:Neuron {uuid: $uuid})-[r]-(linkedNeuron:Neuron)
+			OPTIONAL MATCH (linkedNeuron)-[rp:IS_PARENT]->(o1:Neuron) WHERE o1 <> center 
+			OPTIONAL MATCH (linkedNeuron)<-[rc:IS_PARENT]-(o2:Neuron) WHERE o2 <> center
+			OPTIONAL MATCH (linkedNeuron)-[rf:IS_FRIEND]-(o3:Neuron) WHERE o3 <> center
+			SET center.dateConsulted = TIMESTAMP()
+			RETURN { 
+				relationship_type: TYPE(r),
+				from: STARTNODE(r).uuid,
+				neuronUUID: linkedNeuron.uuid,
+				nChildren: COUNT(DISTINCT rp),
+				nParents: COUNT(DISTINCT rc),
+				nFriends: COUNT(DISTINCT rf)
+			} AS myNeuron
+			`,
+				{
+					"uuid": uuid 
+				})
+				.then(result => {
+
+					let data = result.records;
+					if (result.records.length >=1 ) {
+						data = data.map(neuron =>  {
+							return neuron.get('myNeuron');
+						})
+					}
+
+					resolve( data );
+				})
+				.catch(error => {
+					reject( error );
+				})
+				.then(() => {
+					session.close();
+				});
+
+		});
+	},
 	getCloseNetworkByNeuronUUID(uuid) {
 		return new Promise((resolve, reject) => {
 			const session = neoDriver.session({ defaultAccessMode: neo4j.session.READ });

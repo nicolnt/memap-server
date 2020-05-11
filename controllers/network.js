@@ -5,11 +5,11 @@ module.exports = {
 		closeGraph: {
 			byIdNeuron(req, res) {
 
-				network_model.getCloseNetworkByNeuronUUID(req.params.uuid)
+				network_model.getCloseNetworkAndFurtherLinksByNeuronUUID(req.params.uuid)
 					.then(data => {
 
 						if (data) res.status(200);
- 						else res.send(404);
+						else res.send(404);
 
 						res.send(data);
 					})
