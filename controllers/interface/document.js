@@ -8,7 +8,7 @@ module.exports = {
 			document_model.getNeuronsConnectedToDocumentByUUID(req.params.uuidDoc)
 					.then(data => {
 						if (data) res.status(200);
- 						else res.send(404);
+						else res.send(404);
 						res.send(data);
 					})
 					.catch(err => {

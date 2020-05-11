@@ -1,4 +1,4 @@
-const RequireDataError = require('../Exceptions/RequireDataError');
+const RequireDataError = require('../exceptions/RequireDataError');
 
 module.exports = {
 	isRequire(object, fields) {

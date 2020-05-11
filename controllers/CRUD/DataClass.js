@@ -1,4 +1,4 @@
-const DataException = require('../../Exceptions/DataException');
+const DataException = require('../../exceptions/DataException');
 
 module.exports = class DataClass {
     constructor() {
